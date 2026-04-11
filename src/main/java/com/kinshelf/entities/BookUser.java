@@ -15,12 +15,13 @@ import jakarta.validation.constraints.Max;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BookUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_book_user")
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)

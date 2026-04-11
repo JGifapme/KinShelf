@@ -13,8 +13,8 @@ import java.io.Serializable;
 public class BookAuthorId implements Serializable {
 
     @Column(name = "book_id")
-    private Long bookId;
+    private Integer bookId;
 
     @Column(name = "author_id")
-    private Long authorId;
+    private Integer authorId;
 }
