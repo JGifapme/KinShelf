@@ -100,7 +100,6 @@ CREATE TABLE `loans` (
     `borrower_id` INT UNSIGNED NOT NULL,
     `loan_date` DATE,
     `return_date` DATE,
-    `status` ENUM('EN_COURS','RENDU'),
     FOREIGN KEY (`book_id`) REFERENCES `books` (`id_book`) ON DELETE CASCADE,
     FOREIGN KEY (`owner_id`) REFERENCES `users` (`id_user`) ON DELETE CASCADE,
     FOREIGN KEY (`borrower_id`) REFERENCES `users` (`id_user`) ON DELETE CASCADE

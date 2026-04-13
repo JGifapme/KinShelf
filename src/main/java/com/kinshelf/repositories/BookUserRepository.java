@@ -4,6 +4,9 @@ import com.kinshelf.entities.BookUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface BookUserRepository extends JpaRepository<BookUser, Long> {
+public interface BookUserRepository extends JpaRepository<BookUser, Integer> {
+    List<BookUser> findByUserId(Integer userId);
 }

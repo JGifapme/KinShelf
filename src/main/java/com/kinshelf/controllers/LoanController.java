@@ -1,0 +1,53 @@
+package com.kinshelf.controllers;
+
+import com.kinshelf.dto.loan.LoanCreateDTO;
+import com.kinshelf.dto.loan.LoanResponseDTO;
+import com.kinshelf.services.LoanService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/loans")
+@RequiredArgsConstructor
+public class LoanController {
+
+    private final LoanService loanService;
+    
+    @PostMapping
+    public ResponseEntity<LoanResponseDTO> create(@Valid @RequestBody LoanCreateDTO dto) {
+        return ResponseEntity.ok(loanService.create(dto));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<LoanResponseDTO>> getAll() {
+        return ResponseEntity.ok(loanService.findAll());
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<LoanResponseDTO> getById(@PathVariable Integer id) {
+        return ResponseEntity.ok(loanService.findById(id));
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<LoanResponseDTO> update(
+            @PathVariable Integer id,
+            @Valid @RequestBody LoanCreateDTO dto
+    ) {
+        return ResponseEntity.ok(loanService.update(id, dto));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        loanService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/borrower/{userId}")
+    public ResponseEntity<List<LoanResponseDTO>> getByBorrower(@PathVariable Integer userId) {
+        return ResponseEntity.ok(loanService.findByBorrower(userId));
+    }
+}
