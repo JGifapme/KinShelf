@@ -1,6 +1,6 @@
 package com.kinshelf.dto.category;
 
 public record CategoryResponseDTO(
-        Integer id,
+        Long id,
         String name
 ) {}

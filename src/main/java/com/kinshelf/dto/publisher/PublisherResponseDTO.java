@@ -1,6 +1,6 @@
 package com.kinshelf.dto.publisher;
 
 public record PublisherResponseDTO(
-        Integer id,
+        Long id,
         String name
 ) {}

@@ -3,9 +3,16 @@ USE `kinshelf`;
 
 /*Tables with foreign key : */
 DROP TABLE IF EXISTS `books_genres`;
+CREATE DATABASE IF NOT EXISTS `kinshelf`;
+USE `kinshelf`;
+
+/*Tables with foreign key : */
+DROP TABLE IF EXISTS `books_genres`;
 DROP TABLE IF EXISTS `books_authors`;
-DROP TABLE IF EXISTS `books`;
+DROP TABLE IF EXISTS `books_users`;
 DROP TABLE IF EXISTS `loans`;
+DROP TABLE IF EXISTS `books`;
+
 
 /*Tables without foreign key : */
 DROP TABLE IF EXISTS `series`;
@@ -84,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `books_genres` (
 CREATE TABLE IF NOT EXISTS `books_users` (
   `is_own` BOOLEAN,
   `is_read` BOOLEAN,
+  `is_interested` BOOLEAN,
   `rating` TINYINT UNSIGNED,
   `comment` TEXT,
   `book_id` INT UNSIGNED NOT NULL,
@@ -104,3 +112,4 @@ CREATE TABLE `loans` (
     FOREIGN KEY (`owner_id`) REFERENCES `users` (`id_user`) ON DELETE CASCADE,
     FOREIGN KEY (`borrower_id`) REFERENCES `users` (`id_user`) ON DELETE CASCADE
 );
+

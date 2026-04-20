@@ -23,7 +23,7 @@ public class BookUserController {
     }
     
     @GetMapping
-    public ResponseEntity<List<BookUserResponseDTO>> getAll(@RequestParam(required = false) Integer userId) {
+    public ResponseEntity<List<BookUserResponseDTO>> getAll(@RequestParam(required = false) Long userId) {
         List<BookUserResponseDTO> listBU;
         if (userId != null) {
             listBU = bookUserService.findByUser(userId);
@@ -35,20 +35,20 @@ public class BookUserController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<BookUserResponseDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<BookUserResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(bookUserService.findById(id));
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<BookUserResponseDTO> update(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody BookUserCreateDTO dto
     ) {
         return ResponseEntity.ok(bookUserService.update(id, dto));
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         bookUserService.delete(id);
         return ResponseEntity.noContent().build();
     }

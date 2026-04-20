@@ -28,20 +28,20 @@ public class GenreController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<GenreResponseDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<GenreResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(genreService.findById(id));
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<GenreResponseDTO> update(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody GenreCreateDTO dto
     ) {
         return ResponseEntity.ok(genreService.update(id, dto));
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         genreService.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -50,14 +50,14 @@ public class BookUserService {
                 .toList();
     }
 
-    public BookUserResponseDTO findById(Integer id) {
+    public BookUserResponseDTO findById(Long id) {
         BookUser bu = bookUserRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id));
 
         return BookUserMapper.toDTO(bu);
     }
 
-    public BookUserResponseDTO update(Integer id, BookUserCreateDTO dto) {
+    public BookUserResponseDTO update(Long id, BookUserCreateDTO dto) {
 
         BookUser bu = bookUserRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id));
@@ -67,7 +67,7 @@ public class BookUserService {
         return BookUserMapper.toDTO(bookUserRepository.save(bu));
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!bookUserRepository.existsById(id)) {
             throw new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id);
         }
@@ -75,7 +75,7 @@ public class BookUserService {
         bookUserRepository.deleteById(id);
     }
 
-    public List<BookUserResponseDTO> findByUser(Integer userId) {
+    public List<BookUserResponseDTO> findByUser(Long userId) {
         return bookUserRepository.findByUserId(userId)
                 .stream()
                 .map(BookUserMapper::toDTO)

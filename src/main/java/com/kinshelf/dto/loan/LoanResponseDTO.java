@@ -4,14 +4,14 @@ import java.time.LocalDate;
 
 public record LoanResponseDTO(
 
-        Integer id,
-        Integer bookId,
+        Long id,
+        Long bookId,
         String bookTitle,
 
-        Integer ownerId,
+        Long ownerId,
         String ownerName,
 
-        Integer borrowerId,
+        Long borrowerId,
         String borrowerName,
 
         LocalDate loanDate,

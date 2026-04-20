@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 public record BookAuthorCreateDTO(
 
         @NotNull
-        Integer authorId,
+        Long authorId,
 
         @NotNull
         AuthorRole role

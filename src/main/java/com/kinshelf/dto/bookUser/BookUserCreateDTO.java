@@ -5,10 +5,10 @@ import jakarta.validation.constraints.*;
 public record BookUserCreateDTO(
 
         @NotNull
-        Integer bookId,
+        Long bookId,
 
         @NotNull
-        Integer userId,
+        Long userId,
 
         Boolean isOwn,
 

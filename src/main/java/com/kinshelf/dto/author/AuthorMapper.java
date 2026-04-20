@@ -21,11 +21,10 @@ public class AuthorMapper {
         if (dto == null) {
             return null;
         }
-
-        return Author.builder()
-                .firstName(dto.firstName())
-                .lastName(dto.lastName())
-                .build();
+        Author author = new Author();
+        author.setFirstName(dto.firstName());
+        author.setLastName(dto.lastName());
+        return author;
     }
 
     public static void updateEntity(Author author, AuthorCreateDTO dto) {

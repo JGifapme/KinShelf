@@ -15,8 +15,8 @@ public class Series {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_serie")
-    private Integer id;
+    @Column(name = "id_series")
+    private Long id;
 
     @Column(nullable = false, length = 150)
     private String name;

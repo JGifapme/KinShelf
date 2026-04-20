@@ -73,20 +73,20 @@ public class BookService {
                 .map(BookMapper::toDTO)
                 .toList();
     }
-    public BookResponseDTO findById(Integer id) {
+    public BookResponseDTO findById(Long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livre introuvable pour l'id : " + id));
 
         return BookMapper.toDTO(book);
     }
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!bookRepository.existsById(id)) {
             throw new NotFoundException("Livre introuvable pour l'id : " + id);
         }
 
         bookRepository.deleteById(id);
     }
-    public BookResponseDTO update(Integer id, BookCreateDTO dto) {
+    public BookResponseDTO update(Long id, BookCreateDTO dto) {
 
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livre introuvable pour l'id : " + id));

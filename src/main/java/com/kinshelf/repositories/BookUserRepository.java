@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookUserRepository extends JpaRepository<BookUser, Integer> {
-    List<BookUser> findByUserId(Integer userId);
+public interface BookUserRepository extends JpaRepository<BookUser, Long> {
+    List<BookUser> findByUserId(Long userId);
 }

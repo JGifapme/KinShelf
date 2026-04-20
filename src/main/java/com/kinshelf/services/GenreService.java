@@ -29,14 +29,14 @@ public class GenreService {
                 .toList();
     }
     
-    public GenreResponseDTO findById(Integer id) {
+    public GenreResponseDTO findById(Long id) {
         Genre genre = genreRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Genre introuvable pour l'id : " + id));
 
         return GenreMapper.toDTO(genre);
     }
     
-    public GenreResponseDTO update(Integer id, GenreCreateDTO dto) {
+    public GenreResponseDTO update(Long id, GenreCreateDTO dto) {
         Genre genre = genreRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Genre introuvable pour l'id : " + id));
 
@@ -45,7 +45,7 @@ public class GenreService {
         return GenreMapper.toDTO(genreRepository.save(genre));
     }
     
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!genreRepository.existsById(id)) {
             throw new NotFoundException("Genre introuvable pour l'id : " + id);
         }

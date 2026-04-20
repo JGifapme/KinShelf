@@ -7,13 +7,13 @@ import java.time.LocalDate;
 public record LoanCreateDTO(
 
         @NotNull
-        Integer bookId,
+        Long bookId,
 
         @NotNull
-        Integer ownerId,
+        Long ownerId,
 
         @NotNull
-        Integer borrowerId,
+        Long borrowerId,
 
         LocalDate loanDate,
 

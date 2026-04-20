@@ -28,14 +28,14 @@ public class CategoryService {
                 .toList();
     }
 
-    public CategoryResponseDTO findById(Integer id) {
+    public CategoryResponseDTO findById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Catégorie introuvable pour l'id : " + id));
 
         return CategoryMapper.toDTO(category);
     }
 
-    public CategoryResponseDTO update(Integer id, CategoryCreateDTO dto) {
+    public CategoryResponseDTO update(Long id, CategoryCreateDTO dto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Catégorie introuvable pour l'id : " + id));
 
@@ -44,7 +44,7 @@ public class CategoryService {
         return CategoryMapper.toDTO(categoryRepository.save(category));
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new RuntimeException("Catégorie introuvable pour l'id : " + id);
         }

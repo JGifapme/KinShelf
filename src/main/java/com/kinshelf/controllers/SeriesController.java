@@ -28,20 +28,20 @@ public class SeriesController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<SeriesResponseDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<SeriesResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(seriesService.findById(id));
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<SeriesResponseDTO> update(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody SeriesCreateDTO dto
     ) {
         return ResponseEntity.ok(seriesService.update(id, dto));
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         seriesService.delete(id);
         return ResponseEntity.noContent().build();
     }

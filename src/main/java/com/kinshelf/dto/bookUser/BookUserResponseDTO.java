@@ -2,10 +2,10 @@ package com.kinshelf.dto.bookUser;
 
 public record BookUserResponseDTO(
 
-        Integer id,
-        Integer bookId,
+        Long id,
+        Long bookId,
         String bookTitle,
-        Integer userId,
+        Long userId,
         Boolean isOwn,
         Boolean isRead,
         Integer rating,

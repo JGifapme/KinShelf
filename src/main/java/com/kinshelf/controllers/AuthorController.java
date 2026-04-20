@@ -28,20 +28,20 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorResponseDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<AuthorResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(authorService.findById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AuthorResponseDTO> update(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody AuthorCreateDTO dto
     ) {
         return ResponseEntity.ok(authorService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         authorService.delete(id);
         return ResponseEntity.noContent().build();
     }

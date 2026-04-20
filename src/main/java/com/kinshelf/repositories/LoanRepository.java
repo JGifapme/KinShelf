@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LoanRepository extends JpaRepository<Loan,Integer> {
-    List<Loan> findByBorrowerId(Integer borrowerId);
+public interface LoanRepository extends JpaRepository<Loan,Long> {
+    List<Loan> findByBorrowerId(Long borrowerId);
 }

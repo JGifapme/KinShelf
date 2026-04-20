@@ -28,14 +28,14 @@ public class PublisherService {
                 .toList();
     }
 
-    public PublisherResponseDTO findById(Integer id) {
+    public PublisherResponseDTO findById(Long id) {
         Publisher publisher = publisherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Éditeur non trouvé pour l'id : " + id));
 
         return PublisherMapper.toDTO(publisher);
     }
 
-    public PublisherResponseDTO update(Integer id, PublisherCreateDTO dto) {
+    public PublisherResponseDTO update(Long id, PublisherCreateDTO dto) {
         Publisher publisher = publisherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Éditeur non trouvé pour l'id : " + id));
 
@@ -44,7 +44,7 @@ public class PublisherService {
         return PublisherMapper.toDTO(publisherRepository.save(publisher));
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!publisherRepository.existsById(id)) {
             throw new RuntimeException("Éditeur non trouvé pour l'id : " + id);
         }

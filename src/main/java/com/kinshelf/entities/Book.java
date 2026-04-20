@@ -19,7 +19,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_book")
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, length = 255)
     private String title;
@@ -36,7 +36,7 @@ public class Book {
     private LocalDate publicationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "serie_id")
+    @JoinColumn(name = "series_id")
     private Series series;
 
     @ManyToOne(fetch = FetchType.LAZY)

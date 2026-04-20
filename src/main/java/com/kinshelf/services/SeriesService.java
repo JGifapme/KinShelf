@@ -29,14 +29,14 @@ public class SeriesService {
                 .toList();
     }
     
-    public SeriesResponseDTO findById(Integer id) {
+    public SeriesResponseDTO findById(Long id) {
         Series series = seriesRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Série introuvable pour l'id : " + id));
 
         return SeriesMapper.toDTO(series);
     }
     
-    public SeriesResponseDTO update(Integer id, SeriesCreateDTO dto) {
+    public SeriesResponseDTO update(Long id, SeriesCreateDTO dto) {
         Series series = seriesRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Série introuvable pour l'id : " + id));
 
@@ -45,7 +45,7 @@ public class SeriesService {
         return SeriesMapper.toDTO(seriesRepository.save(series));
     }
     
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!seriesRepository.existsById(id)) {
             throw new NotFoundException("Série introuvable pour l'id : " + id);
         }

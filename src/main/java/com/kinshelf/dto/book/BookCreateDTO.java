@@ -18,13 +18,13 @@ public record BookCreateDTO(
 
         LocalDate publicationDate,
 
-        Integer publisherId,
-        Integer categoryId,
-        Integer seriesId,
+        Long publisherId,
+        Long categoryId,
+        Long seriesId,
 
         @NotEmpty
         List<BookAuthorCreateDTO> authors,
 
-        List<Integer> genreIds
+        List<Long> genreIds
 
 ) {}

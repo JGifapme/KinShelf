@@ -33,14 +33,14 @@ public class UserService {
                 .toList();
     }
     
-    public UserResponseDTO findById(Integer id) {
+    public UserResponseDTO findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable pour l'id : " + id));
 
         return UserMapper.toDTO(user);
     }
     
-    public UserResponseDTO update(Integer id, UserCreateDTO dto) {
+    public UserResponseDTO update(Long id, UserCreateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable pour l'id : " + id));
 
@@ -49,7 +49,7 @@ public class UserService {
         return UserMapper.toDTO(userRepository.save(user));
     }
     
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!userRepository.existsById(id)) {
             throw new NotFoundException("Utilisateur introuvable pour l'id : " + id);
         }

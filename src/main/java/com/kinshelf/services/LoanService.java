@@ -56,14 +56,14 @@ public class LoanService {
                 .toList();
     }
     
-    public LoanResponseDTO findById(Integer id) {
+    public LoanResponseDTO findById(Long id) {
         Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Prêt introuvable pour l'id : " + id));
 
         return LoanMapper.toDTO(loan);
     }
     
-    public LoanResponseDTO update(Integer id, LoanCreateDTO dto) {
+    public LoanResponseDTO update(Long id, LoanCreateDTO dto) {
 
         Loan loan = loanRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Prêt introuvable pour l'id : " + id));
@@ -73,14 +73,14 @@ public class LoanService {
         return LoanMapper.toDTO(loanRepository.save(loan));
     }
     
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!loanRepository.existsById(id)) {
             throw new NotFoundException("Prêt introuvable pour l'id : " + id);
         }
         loanRepository.deleteById(id);
     }
     
-    public List<LoanResponseDTO> findByBorrower(Integer userId) {
+    public List<LoanResponseDTO> findByBorrower(Long userId) {
         return loanRepository.findByBorrowerId(userId)
                 .stream()
                 .map(LoanMapper::toDTO)

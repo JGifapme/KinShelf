@@ -12,13 +12,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_author")
-    private Integer id;
+    private Long id;
 
     @Column(name = "fname", nullable = false, length = 75)
     private String firstName;

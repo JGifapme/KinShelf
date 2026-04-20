@@ -28,26 +28,26 @@ public class LoanController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<LoanResponseDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<LoanResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(loanService.findById(id));
     }
     
     @PutMapping("/{id}")
     public ResponseEntity<LoanResponseDTO> update(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody LoanCreateDTO dto
     ) {
         return ResponseEntity.ok(loanService.update(id, dto));
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         loanService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/borrower/{userId}")
-    public ResponseEntity<List<LoanResponseDTO>> getByBorrower(@PathVariable Integer userId) {
+    public ResponseEntity<List<LoanResponseDTO>> getByBorrower(@PathVariable Long userId) {
         return ResponseEntity.ok(loanService.findByBorrower(userId));
     }
 }

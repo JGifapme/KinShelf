@@ -29,14 +29,14 @@ public class AuthorService {
                 .toList();
     }
 
-    public AuthorResponseDTO findById(Integer id) {
+    public AuthorResponseDTO findById(Long id) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("L'auteur introuvable pour l'id : " + id));
 
         return AuthorMapper.toDTO(author);
     }
 
-    public AuthorResponseDTO update(Integer id, AuthorCreateDTO dto) {
+    public AuthorResponseDTO update(Long id, AuthorCreateDTO dto) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("L'auteur introuvable pour l'id : " + id));
 
@@ -46,7 +46,7 @@ public class AuthorService {
         return AuthorMapper.toDTO(saved);
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!authorRepository.existsById(id)) {
             throw new RuntimeException("L'auteur introuvable pour l'id : " + id);
         }

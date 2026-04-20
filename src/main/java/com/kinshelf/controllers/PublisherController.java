@@ -28,20 +28,20 @@ public class PublisherController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PublisherResponseDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<PublisherResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(publisherService.findById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PublisherResponseDTO> update(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody PublisherCreateDTO dto
     ) {
         return ResponseEntity.ok(publisherService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         publisherService.delete(id);
         return ResponseEntity.noContent().build();
     }
