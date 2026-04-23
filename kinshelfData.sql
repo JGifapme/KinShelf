@@ -185,5 +185,9 @@ VALUES
  (SELECT id_genre FROM genres WHERE name='Tranche de vie'));
  
  
+ -- Rajout Utilisateurs : 
  
- 
+ INSERT INTO `users` (`fname`, `lname`, `dob`, `email`, `password`) 
+VALUES 
+('Jean', 'Dupont', '1985-03-15', 'jean.dupont@email.com', '$2a$10$eBcD1234567890abcdefghij'), 
+('Marie', 'Lefebvre', '1992-07-22', 'marie.lefe@email.com', '$2a$10$zXyV0987654321fedcbazyxw');

@@ -1,8 +1,11 @@
 package com.kinshelf.services;
 
+import com.kinshelf.dto.book.BookResponseDTO;
 import com.kinshelf.dto.bookUser.*;
+import com.kinshelf.dto.user.UserResponseDTO;
 import com.kinshelf.entities.Book;
 import com.kinshelf.entities.BookUser;
+import com.kinshelf.entities.BookUserId;
 import com.kinshelf.entities.User;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.BookRepository;
@@ -36,6 +39,7 @@ public class BookUserService {
                 .user(user)
                 .isOwn(dto.isOwn())
                 .isRead(dto.isRead())
+                .isInterested(dto.isInterested())
                 .rating(dto.rating())
                 .comment(dto.comment())
                 .build();
@@ -50,14 +54,14 @@ public class BookUserService {
                 .toList();
     }
 
-    public BookUserResponseDTO findById(Long id) {
+    public BookUserResponseDTO findById(BookUserId id) {
         BookUser bu = bookUserRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id));
 
         return BookUserMapper.toDTO(bu);
     }
 
-    public BookUserResponseDTO update(Long id, BookUserCreateDTO dto) {
+    public BookUserResponseDTO update(BookUserId id, BookUserCreateDTO dto) {
 
         BookUser bu = bookUserRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id));
@@ -67,7 +71,7 @@ public class BookUserService {
         return BookUserMapper.toDTO(bookUserRepository.save(bu));
     }
 
-    public void delete(Long id) {
+    public void delete(BookUserId id) {
         if (!bookUserRepository.existsById(id)) {
             throw new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id);
         }
@@ -80,5 +84,25 @@ public class BookUserService {
                 .stream()
                 .map(BookUserMapper::toDTO)
                 .toList();
+    }
+
+    // Lecture : tout le monde peut voir qui possède quoi
+    //sur un livre on peut voir qui le possède
+    public List<UserResponseDTO> getOwnersListByBook(Long bookId) {
+        return null;
+    }
+
+    // sur un utilisateur quels livres il a
+    public List<BookResponseDTO> getBooksListByOwner(Long UserId) {
+        return null;
+    }
+
+    // Modif : Seul le propriétaire (l'user identifié) peut modifier
+    public void updateMyBookStatus(Long bookId, Long currentUserId, BookUserCreateDTO dto) {
+        BookUserId id = new BookUserId(bookId, currentUserId);
+        BookUser entry = bookUserRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Ce n'est pas votre fiche !")); // Créer une autre exception
+
+        bookUserRepository.save(entry);
     }
 }

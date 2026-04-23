@@ -1,4 +1,4 @@
-package com.kinshelf.dto.book;
+package com.kinshelf.dto.bookAuthor;
 
 import com.kinshelf.entities.AuthorRole;
 import jakarta.validation.constraints.NotNull;

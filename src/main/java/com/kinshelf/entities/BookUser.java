@@ -6,29 +6,24 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
 
 @Entity
-@Table(
-        name = "books_users",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"book_id", "user_id"})
-        }
-)
+@Table(name = "books_users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class BookUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_book_user")
-    private Long id;
+    @EmbeddedId
+    private BookUserId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
+    @MapsId("bookId")
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "is_own")
@@ -36,6 +31,9 @@ public class BookUser {
 
     @Column(name = "is_read")
     private Boolean isRead;
+
+    @Column(name = "is_interested")
+    private Boolean isInterested;
 
     @Min(0)
     @Max(5)

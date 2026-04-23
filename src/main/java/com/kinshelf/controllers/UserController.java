@@ -45,4 +45,6 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    //GET /{userId}/collection : voir tout les livres possédé par tel membre
 }

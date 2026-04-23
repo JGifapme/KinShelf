@@ -14,6 +14,8 @@ public record BookUserCreateDTO(
 
         Boolean isRead,
 
+        Boolean isInterested,
+
         @Min(0)
         @Max(5)
         Integer rating,

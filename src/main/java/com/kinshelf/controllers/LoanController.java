@@ -16,7 +16,10 @@ import java.util.List;
 public class LoanController {
 
     private final LoanService loanService;
-    
+
+    //Controller pour Pret ou dans BookController ? Voir tout les prets de tout le groupe est utile ...
+    // mais les autres méthodes plutot dans les tables dédiée soit BookController soit UserController
+
     @PostMapping
     public ResponseEntity<LoanResponseDTO> create(@Valid @RequestBody LoanCreateDTO dto) {
         return ResponseEntity.ok(loanService.create(dto));

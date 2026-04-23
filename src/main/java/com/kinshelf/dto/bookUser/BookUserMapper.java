@@ -14,6 +14,7 @@ public class BookUserMapper {
                 bu.getUser().getId(),
                 bu.getIsOwn(),
                 bu.getIsRead(),
+                bu.getIsInterested(),
                 bu.getRating(),
                 bu.getComment()
         );
@@ -24,6 +25,7 @@ public class BookUserMapper {
 
         bu.setIsOwn(dto.isOwn());
         bu.setIsRead(dto.isRead());
+        bu.setIsRead(dto.isInterested());
         bu.setRating(dto.rating());
         bu.setComment(dto.comment());
     }
