@@ -2,6 +2,7 @@ package com.kinshelf.controllers;
 
 import com.kinshelf.dto.series.SeriesCreateDTO;
 import com.kinshelf.dto.series.SeriesResponseDTO;
+import com.kinshelf.dto.series.SeriesWithBooksDTO;
 import com.kinshelf.services.SeriesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,8 @@ public class SeriesController {
 
     //n'importe quel user identifié
     @GetMapping("/{id}")
-    public ResponseEntity<SeriesResponseDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<SeriesWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(seriesService.findById(id));
-        //voir les livres de la série
     }
 
     //admin suelement

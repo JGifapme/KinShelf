@@ -5,7 +5,9 @@ import com.kinshelf.entities.BookUser;
 public class BookUserMapper {
 
     public static BookUserResponseDTO toDTO(BookUser bu) {
-        if (bu == null) return null;
+        if (bu == null) {
+            return null;
+        }
 
         return new BookUserResponseDTO(
                 bu.getId(),
@@ -21,7 +23,9 @@ public class BookUserMapper {
     }
 
     public static void updateEntity(BookUser bu, BookUserCreateDTO dto) {
-        if (bu == null || dto == null) return;
+        if (bu == null || dto == null) {
+            return;
+        }
 
         bu.setIsOwn(dto.isOwn());
         bu.setIsRead(dto.isRead());

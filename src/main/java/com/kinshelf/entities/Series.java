@@ -21,9 +21,6 @@ public class Series {
     @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(name = "nb_tomes")
-    private Integer numberOfVolumes;
-
     @Enumerated(EnumType.STRING)
     private SeriesStatus status;
 

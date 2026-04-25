@@ -2,6 +2,7 @@ package com.kinshelf.controllers;
 
 import com.kinshelf.dto.genre.GenreCreateDTO;
 import com.kinshelf.dto.genre.GenreResponseDTO;
+import com.kinshelf.dto.genre.GenreWithBooksDTO;
 import com.kinshelf.services.GenreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,8 @@ public class GenreController {
 
     //n'importe quel user identifié
     @GetMapping("/{id}")
-    public ResponseEntity<GenreResponseDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<GenreWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(genreService.findById(id));
-        //ajouter les listes des ouvrages
     }
 
     //juste admins

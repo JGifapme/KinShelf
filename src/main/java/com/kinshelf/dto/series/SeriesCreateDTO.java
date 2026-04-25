@@ -7,7 +7,5 @@ import jakarta.validation.constraints.Positive;
 public record SeriesCreateDTO(
         @NotBlank
         String name,
-        @Positive
-        Integer numberOfVolumes,
         SeriesStatus status
 ) {}

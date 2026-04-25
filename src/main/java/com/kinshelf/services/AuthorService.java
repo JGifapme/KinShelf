@@ -3,6 +3,7 @@ package com.kinshelf.services;
 import com.kinshelf.dto.author.AuthorCreateDTO;
 import com.kinshelf.dto.author.AuthorMapper;
 import com.kinshelf.dto.author.AuthorResponseDTO;
+import com.kinshelf.dto.author.AuthorWithBooksDTO;
 import com.kinshelf.entities.Author;
 import com.kinshelf.repositories.AuthorRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +30,11 @@ public class AuthorService {
                 .toList();
     }
 
-    public AuthorResponseDTO findById(Long id) {
+    public AuthorWithBooksDTO findById(Long id) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("L'auteur introuvable pour l'id : " + id));
 
-        return AuthorMapper.toDTO(author);
+        return AuthorMapper.toDTOWithBooks(author);
     }
 
     public AuthorResponseDTO update(Long id, AuthorCreateDTO dto) {

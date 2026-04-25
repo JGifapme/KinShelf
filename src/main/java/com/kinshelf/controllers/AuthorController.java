@@ -2,6 +2,7 @@ package com.kinshelf.controllers;
 
 import com.kinshelf.dto.author.AuthorCreateDTO;
 import com.kinshelf.dto.author.AuthorResponseDTO;
+import com.kinshelf.dto.author.AuthorWithBooksDTO;
 import com.kinshelf.services.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,8 @@ public class AuthorController {
 
     //n'importe quel user identifié
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorResponseDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<AuthorWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(authorService.findById(id));
-        //retourner aussi la liste des livres de l'auteur
     }
 
     //juste admin

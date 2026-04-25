@@ -2,6 +2,7 @@ package com.kinshelf.controllers;
 
 import com.kinshelf.dto.publisher.PublisherCreateDTO;
 import com.kinshelf.dto.publisher.PublisherResponseDTO;
+import com.kinshelf.dto.publisher.PublisherWithBooksDTO;
 import com.kinshelf.services.PublisherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,8 @@ public class PublisherController {
 
     //n'importe quel user identifié
     @GetMapping("/{id}")
-    public ResponseEntity<PublisherResponseDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<PublisherWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(publisherService.findById(id));
-        //rajouter la liste des livres
     }
 
     //admin seulement

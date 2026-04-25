@@ -3,6 +3,7 @@ package com.kinshelf.services;
 import com.kinshelf.dto.publisher.PublisherCreateDTO;
 import com.kinshelf.dto.publisher.PublisherMapper;
 import com.kinshelf.dto.publisher.PublisherResponseDTO;
+import com.kinshelf.dto.publisher.PublisherWithBooksDTO;
 import com.kinshelf.entities.Publisher;
 import com.kinshelf.repositories.PublisherRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +29,11 @@ public class PublisherService {
                 .toList();
     }
 
-    public PublisherResponseDTO findById(Long id) {
+    public PublisherWithBooksDTO findById(Long id) {
         Publisher publisher = publisherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Éditeur non trouvé pour l'id : " + id));
 
-        return PublisherMapper.toDTO(publisher);
+        return PublisherMapper.toDTOPublisherWithBooks(publisher);
     }
 
     public PublisherResponseDTO update(Long id, PublisherCreateDTO dto) {

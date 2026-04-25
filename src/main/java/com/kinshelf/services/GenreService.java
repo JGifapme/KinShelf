@@ -3,6 +3,7 @@ package com.kinshelf.services;
 import com.kinshelf.dto.genre.GenreCreateDTO;
 import com.kinshelf.dto.genre.GenreMapper;
 import com.kinshelf.dto.genre.GenreResponseDTO;
+import com.kinshelf.dto.genre.GenreWithBooksDTO;
 import com.kinshelf.entities.Genre;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.GenreRepository;
@@ -29,11 +30,11 @@ public class GenreService {
                 .toList();
     }
     
-    public GenreResponseDTO findById(Long id) {
+    public GenreWithBooksDTO findById(Long id) {
         Genre genre = genreRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Genre introuvable pour l'id : " + id));
 
-        return GenreMapper.toDTO(genre);
+        return GenreMapper.toDTOGenreWithBooks(genre);
     }
     
     public GenreResponseDTO update(Long id, GenreCreateDTO dto) {

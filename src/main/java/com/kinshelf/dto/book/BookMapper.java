@@ -1,5 +1,14 @@
 package com.kinshelf.dto.book;
 
+import com.kinshelf.dto.author.AuthorResponseDTO;
+import com.kinshelf.dto.author.AuthorResponseWithRoleDTO;
+import com.kinshelf.dto.category.CategoryMapper;
+import com.kinshelf.dto.category.CategoryResponseDTO;
+import com.kinshelf.dto.genre.GenreResponseDTO;
+import com.kinshelf.dto.publisher.PublisherMapper;
+import com.kinshelf.dto.publisher.PublisherResponseDTO;
+import com.kinshelf.dto.series.SeriesMapper;
+import com.kinshelf.dto.series.SeriesResponseDTO;
 import com.kinshelf.entities.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +20,22 @@ public class BookMapper {
             return null;
         }
 
+        PublisherResponseDTO publisherDTO = null;
+        if (book.getPublisher() != null) {
+            publisherDTO = PublisherMapper.toDTO(book.getPublisher());
+        }
+
+        CategoryResponseDTO categoryDTO = null;
+        if (book.getCategory() != null) {
+            categoryDTO = CategoryMapper.toDTO(book.getCategory());
+        }
+
+        SeriesResponseDTO seriesDTO = null;
+        if (book.getSeries() != null) {
+            seriesDTO = SeriesMapper.toDTO(book.getSeries());
+        }
         return new BookResponseDTO(
+                book.getId(),
                 book.getTitle(),
                 book.getDescription(),
                 book.getNumberOfPages(),
@@ -19,19 +43,17 @@ public class BookMapper {
                 book.getPublicationDate(),
 
                 // relations simples
-                book.getPublisher() != null ? book.getPublisher().getName() : null,
-                book.getCategory() != null ? book.getCategory().getName() : null,
-                book.getSeries() != null ? book.getSeries().getName() : null,
+                publisherDTO,
+                categoryDTO,
+                seriesDTO,
 
-                // authors
+                // relations many to many
                 mapAuthors(book),
-
-                // genres
                 mapGenres(book)
         );
     }
 
-    private static List<String> mapAuthors(Book book) {
+    private static List<AuthorResponseWithRoleDTO> mapAuthors(Book book) {
         if (book.getBookAuthors() == null) {
             return List.of();
         }
@@ -40,19 +62,28 @@ public class BookMapper {
                 .stream()
                 .map(ba -> {
                     Author author = ba.getAuthor();
-                    return author.getFirstName() + " " + author.getLastName();
+                    // On récupère le rôle depuis books_authors
+                    String roleName = ba.getRole() != null ? ba.getRole().name() : "AUTEUR";
+
+                    return new AuthorResponseWithRoleDTO(
+                            author.getId(),
+                            author.getFirstName(),
+                            author.getLastName(),
+                            author.getFirstName() + " " + author.getLastName(),
+                            roleName
+                    );
                 })
                 .collect(Collectors.toList());
     }
 
-    private static List<String> mapGenres(Book book) {
+    private static List<GenreResponseDTO> mapGenres(Book book) {
         if (book.getGenres() == null) {
             return List.of();
         }
 
         return book.getGenres()
                 .stream()
-                .map(Genre::getName)
+                .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName()))
                 .collect(Collectors.toList());
     }
 }

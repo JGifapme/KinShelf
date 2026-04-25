@@ -5,7 +5,9 @@ import com.kinshelf.entities.Loan;
 public class LoanMapper {
 
     public static LoanResponseDTO toDTO(Loan loan) {
-        if (loan == null) return null;
+        if (loan == null) {
+            return null;
+        }
 
         return new LoanResponseDTO(
                 loan.getId(),
@@ -25,7 +27,9 @@ public class LoanMapper {
     }
 
     public static void updateEntity(Loan loan, LoanCreateDTO dto) {
-        if (loan == null || dto == null) return;
+        if (loan == null || dto == null) {
+            return;
+        }
 
         loan.setLoanDate(dto.loanDate());
         loan.setReturnDate(dto.returnDate());

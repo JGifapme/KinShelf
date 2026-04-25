@@ -3,6 +3,7 @@ package com.kinshelf.services;
 import com.kinshelf.dto.series.SeriesCreateDTO;
 import com.kinshelf.dto.series.SeriesMapper;
 import com.kinshelf.dto.series.SeriesResponseDTO;
+import com.kinshelf.dto.series.SeriesWithBooksDTO;
 import com.kinshelf.entities.Series;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.SeriesRepository;
@@ -29,11 +30,11 @@ public class SeriesService {
                 .toList();
     }
     
-    public SeriesResponseDTO findById(Long id) {
+    public SeriesWithBooksDTO findById(Long id) {
         Series series = seriesRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Série introuvable pour l'id : " + id));
 
-        return SeriesMapper.toDTO(series);
+        return SeriesMapper.toDTOSeriesWithBooks(series);
     }
     
     public SeriesResponseDTO update(Long id, SeriesCreateDTO dto) {

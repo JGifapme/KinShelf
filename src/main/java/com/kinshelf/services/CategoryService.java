@@ -3,6 +3,7 @@ package com.kinshelf.services;
 import com.kinshelf.dto.category.CategoryCreateDTO;
 import com.kinshelf.dto.category.CategoryMapper;
 import com.kinshelf.dto.category.CategoryResponseDTO;
+import com.kinshelf.dto.category.CategoryWithBooksDTO;
 import com.kinshelf.entities.Category;
 import com.kinshelf.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +29,11 @@ public class CategoryService {
                 .toList();
     }
 
-    public CategoryResponseDTO findById(Long id) {
+    public CategoryWithBooksDTO findById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Catégorie introuvable pour l'id : " + id));
 
-        return CategoryMapper.toDTO(category);
+        return CategoryMapper.toDTOCatWithBooks(category);
     }
 
     public CategoryResponseDTO update(Long id, CategoryCreateDTO dto) {

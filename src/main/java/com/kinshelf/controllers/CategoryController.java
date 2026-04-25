@@ -2,6 +2,7 @@ package com.kinshelf.controllers;
 
 import com.kinshelf.dto.category.CategoryCreateDTO;
 import com.kinshelf.dto.category.CategoryResponseDTO;
+import com.kinshelf.dto.category.CategoryWithBooksDTO;
 import com.kinshelf.services.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,8 @@ public class CategoryController {
 
     //n'importe quel user identifié
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponseDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<CategoryWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.findById(id));
-        //retourné les liste des ouvrgaes
     }
 
     //juste les admins
