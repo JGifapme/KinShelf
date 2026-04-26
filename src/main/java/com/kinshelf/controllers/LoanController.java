@@ -35,7 +35,7 @@ public class LoanController {
         return ResponseEntity.ok(loanService.findById(id));
     }
     
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<LoanResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody LoanCreateDTO dto

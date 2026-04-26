@@ -36,11 +36,21 @@ public class UserMapper {
             return;
         }
 
-        user.setFirstName(dto.firstName());
-        user.setLastName(dto.lastName());
-        user.setDateOfBirth(dto.dateOfBirth());
-        user.setEmail(dto.email());
-        user.setPassword(dto.password());
-
+        if (dto.firstName() != null) {
+            user.setFirstName(dto.firstName());
+        }
+        if (dto.lastName() != null) {
+            user.setLastName(dto.lastName());
+        }
+        if (dto.dateOfBirth() != null) {
+            user.setDateOfBirth(dto.dateOfBirth());
+        }
+        //à voir si il ne faut pas faire une autre méthode pour mettre les infos sensible à jour.
+        if (dto.email() != null) {
+            user.setEmail(dto.email());
+        }
+        if (dto.password() != null) {
+            user.setPassword(dto.password());
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.kinshelf.dto.series.SeriesWithBooksDTO;
 import com.kinshelf.entities.Series;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.SeriesRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,8 @@ import java.util.List;
 public class SeriesService {
 
     private final SeriesRepository seriesRepository;
-    
+
+    @Transactional
     public SeriesResponseDTO create(SeriesCreateDTO dto) {
         Series series = SeriesMapper.toEntity(dto);
         return SeriesMapper.toDTO(seriesRepository.save(series));
@@ -36,7 +38,8 @@ public class SeriesService {
 
         return SeriesMapper.toDTOSeriesWithBooks(series);
     }
-    
+
+    @Transactional
     public SeriesResponseDTO update(Long id, SeriesCreateDTO dto) {
         Series series = seriesRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Série introuvable pour l'id : " + id));
@@ -45,7 +48,7 @@ public class SeriesService {
 
         return SeriesMapper.toDTO(seriesRepository.save(series));
     }
-    
+    @Transactional
     public void delete(Long id) {
         if (!seriesRepository.existsById(id)) {
             throw new NotFoundException("Série introuvable pour l'id : " + id);

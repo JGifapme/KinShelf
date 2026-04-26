@@ -37,7 +37,7 @@ public class PublisherController {
     }
 
     //admin seulement
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<PublisherResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody PublisherCreateDTO dto

@@ -37,8 +37,9 @@ public class CategoryMapper {
         if (category == null || dto == null) {
             return;
         }
-
-        category.setName(dto.name());
+        if (dto.name() != null) {
+            category.setName(dto.name());
+        }
     }
 
     public static CategoryWithBooksDTO toDTOCatWithBooks(Category category) {

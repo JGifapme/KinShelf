@@ -34,8 +34,9 @@ public class GenreMapper {
         if (genre == null || dto == null) {
             return;
         }
-
-        genre.setName(dto.name());
+        if (dto.name() != null) {
+            genre.setName(dto.name());
+        }
     }
 
     public static GenreWithBooksDTO toDTOGenreWithBooks(Genre genre) {

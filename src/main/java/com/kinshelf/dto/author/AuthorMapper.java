@@ -40,8 +40,12 @@ public class AuthorMapper {
         if (author == null || dto == null) {
             return;
         }
-        author.setFirstName(dto.firstName());
-        author.setLastName(dto.lastName());
+        if (dto.firstName() != null) {
+            author.setFirstName(dto.firstName());
+        }
+        if (dto.lastName() != null) {
+            author.setLastName(dto.lastName());
+        }
     }
 
     public static AuthorWithBooksDTO toDTOWithBooks(Author author) {

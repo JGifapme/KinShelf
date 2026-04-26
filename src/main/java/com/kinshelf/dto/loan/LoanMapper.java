@@ -31,7 +31,12 @@ public class LoanMapper {
             return;
         }
 
-        loan.setLoanDate(dto.loanDate());
-        loan.setReturnDate(dto.returnDate());
+        //les deux seuls infos qui peuvent changer dans un prêt :
+        if (dto.loanDate() != null) {
+            loan.setLoanDate(dto.loanDate());
+        }
+        if (dto.returnDate() != null) {
+            loan.setReturnDate(dto.returnDate());
+        }
     }
 }

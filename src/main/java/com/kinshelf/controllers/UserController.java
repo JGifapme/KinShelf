@@ -32,7 +32,7 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
     
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody UserCreateDTO dto

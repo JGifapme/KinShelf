@@ -37,7 +37,7 @@ public class GenreController {
     }
 
     //juste admins
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<GenreResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody GenreCreateDTO dto

@@ -39,8 +39,12 @@ public class SeriesMapper {
             return;
         }
 
-        series.setName(dto.name());
-        series.setStatus(dto.status());
+        if (dto.name() != null) {
+            series.setName(dto.name());
+        }
+        if (dto.status() != null) {
+            series.setStatus(dto.status());
+        }
     }
 
     public static SeriesWithBooksDTO toDTOSeriesWithBooks(Series series) {

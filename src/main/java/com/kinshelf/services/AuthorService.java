@@ -6,6 +6,7 @@ import com.kinshelf.dto.author.AuthorResponseDTO;
 import com.kinshelf.dto.author.AuthorWithBooksDTO;
 import com.kinshelf.entities.Author;
 import com.kinshelf.repositories.AuthorRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
 
+    @Transactional
     public AuthorResponseDTO create(AuthorCreateDTO dto) {
         Author author = AuthorMapper.toEntity(dto);
         Author saved = authorRepository.save(author);
@@ -37,6 +39,7 @@ public class AuthorService {
         return AuthorMapper.toDTOWithBooks(author);
     }
 
+    @Transactional
     public AuthorResponseDTO update(Long id, AuthorCreateDTO dto) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("L'auteur introuvable pour l'id : " + id));
@@ -47,6 +50,7 @@ public class AuthorService {
         return AuthorMapper.toDTO(saved);
     }
 
+    @Transactional
     public void delete(Long id) {
         if (!authorRepository.existsById(id)) {
             throw new RuntimeException("L'auteur introuvable pour l'id : " + id);

@@ -2,7 +2,13 @@ package com.kinshelf.controllers;
 
 import com.kinshelf.dto.book.BookCreateDTO;
 import com.kinshelf.dto.book.BookResponseDTO;
+import com.kinshelf.dto.book.BookTitleAndImgDTO;
+import com.kinshelf.dto.book.BookWithUsersInputDTO;
+import com.kinshelf.dto.bookUser.BookUserCreateDTO;
+import com.kinshelf.dto.bookUser.BookUserResponseDTO;
+import com.kinshelf.entities.BookUserId;
 import com.kinshelf.services.BookService;
+import com.kinshelf.services.BookUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +22,7 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+    private final BookUserService bookUserService;
 
     //n'importe quel user identifié
     @PostMapping
@@ -32,14 +39,12 @@ public class BookController {
 
     //n'importe quel user identifié
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> getById(@PathVariable Long id) {
-        //retourner les infos de bookUser pour tous les membres pour ce livre :
-        //qui le possède, la note moyenne, les commentaires...
+    public ResponseEntity<BookWithUsersInputDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(bookService.findById(id));
     }
 
     //juste les admins
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<BookResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody BookCreateDTO dto
@@ -57,7 +62,15 @@ public class BookController {
 
     //Gestion des relations Book <-> User
 
-    //@PatchMapping("/{bookId}/status") permet de mettre si on a lu un livre,
+    @PatchMapping("/{bookId}/status/{userId}") //permet de mettre si on a lu un livre, le {userId} sera
+    // remplacé lorsque spring security sera en place par la récupération de l'id de la personne connectée
+    public ResponseEntity<BookWithUsersInputDTO> updateStatus(
+            @PathVariable Long bookId,
+            @PathVariable Long userId,
+            @Valid @RequestBody BookUserCreateDTO bookUserCreateDTO) {
+        bookUserService.upCreate(new BookUserId(bookId, userId), bookUserCreateDTO);
+        return ResponseEntity.ok(bookService.findById(bookId));
+    }
     // si on le possède, la note, le commentaire,
     // seulement le permettre pour l'utilisateur identifié, récupérer son id via spring security
 

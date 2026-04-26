@@ -37,7 +37,7 @@ public class CategoryController {
     }
 
     //juste les admins
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<CategoryResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody CategoryCreateDTO dto

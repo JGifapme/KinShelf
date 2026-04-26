@@ -6,6 +6,7 @@ import com.kinshelf.dto.user.UserResponseDTO;
 import com.kinshelf.entities.User;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,8 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    
+
+    @Transactional
     public UserResponseDTO create(UserCreateDTO dto) {
         User user = UserMapper.toEntity(dto);
 
@@ -39,7 +41,8 @@ public class UserService {
 
         return UserMapper.toDTO(user);
     }
-    
+
+    @Transactional
     public UserResponseDTO update(Long id, UserCreateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable pour l'id : " + id));
@@ -48,7 +51,7 @@ public class UserService {
 
         return UserMapper.toDTO(userRepository.save(user));
     }
-    
+    @Transactional
     public void delete(Long id) {
         if (!userRepository.existsById(id)) {
             throw new NotFoundException("Utilisateur introuvable pour l'id : " + id);

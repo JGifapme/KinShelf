@@ -37,7 +37,7 @@ public class SeriesController {
     }
 
     //admin suelement
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<SeriesResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody SeriesCreateDTO dto

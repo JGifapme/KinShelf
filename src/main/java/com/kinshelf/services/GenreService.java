@@ -7,6 +7,7 @@ import com.kinshelf.dto.genre.GenreWithBooksDTO;
 import com.kinshelf.entities.Genre;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.GenreRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,8 @@ import java.util.List;
 public class GenreService {
 
     private final GenreRepository genreRepository;
-    
+
+    @Transactional
     public GenreResponseDTO create(GenreCreateDTO dto) {
         Genre genre = GenreMapper.toEntity(dto);
         return GenreMapper.toDTO(genreRepository.save(genre));
@@ -36,7 +38,8 @@ public class GenreService {
 
         return GenreMapper.toDTOGenreWithBooks(genre);
     }
-    
+
+    @Transactional
     public GenreResponseDTO update(Long id, GenreCreateDTO dto) {
         Genre genre = genreRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Genre introuvable pour l'id : " + id));
@@ -45,7 +48,7 @@ public class GenreService {
 
         return GenreMapper.toDTO(genreRepository.save(genre));
     }
-    
+    @Transactional
     public void delete(Long id) {
         if (!genreRepository.existsById(id)) {
             throw new NotFoundException("Genre introuvable pour l'id : " + id);

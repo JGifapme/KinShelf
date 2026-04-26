@@ -36,7 +36,9 @@ public class PublisherMapper {
         if (publisher == null || dto == null){
             return;
         }
-        publisher.setName(dto.name());
+        if (dto.name() != null) {
+            publisher.setName(dto.name());
+        }
     }
     public static PublisherWithBooksDTO toDTOPublisherWithBooks(Publisher publisher) {
         if (publisher == null) {

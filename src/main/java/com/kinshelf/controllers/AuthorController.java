@@ -37,7 +37,7 @@ public class AuthorController {
     }
 
     //juste admin
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<AuthorResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody AuthorCreateDTO dto

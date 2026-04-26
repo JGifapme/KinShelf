@@ -6,6 +6,7 @@ import com.kinshelf.dto.publisher.PublisherResponseDTO;
 import com.kinshelf.dto.publisher.PublisherWithBooksDTO;
 import com.kinshelf.entities.Publisher;
 import com.kinshelf.repositories.PublisherRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class PublisherService {
 
     private final PublisherRepository publisherRepository;
 
+    @Transactional
     public PublisherResponseDTO create(PublisherCreateDTO dto) {
         Publisher publisher = PublisherMapper.toEntity(dto);
         return PublisherMapper.toDTO(publisherRepository.save(publisher));
@@ -36,6 +38,7 @@ public class PublisherService {
         return PublisherMapper.toDTOPublisherWithBooks(publisher);
     }
 
+    @Transactional
     public PublisherResponseDTO update(Long id, PublisherCreateDTO dto) {
         Publisher publisher = publisherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Éditeur non trouvé pour l'id : " + id));
@@ -45,11 +48,11 @@ public class PublisherService {
         return PublisherMapper.toDTO(publisherRepository.save(publisher));
     }
 
+    @Transactional
     public void delete(Long id) {
         if (!publisherRepository.existsById(id)) {
             throw new RuntimeException("Éditeur non trouvé pour l'id : " + id);
         }
-
         publisherRepository.deleteById(id);
     }
 }

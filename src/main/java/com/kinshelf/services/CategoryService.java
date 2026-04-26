@@ -6,6 +6,7 @@ import com.kinshelf.dto.category.CategoryResponseDTO;
 import com.kinshelf.dto.category.CategoryWithBooksDTO;
 import com.kinshelf.entities.Category;
 import com.kinshelf.repositories.CategoryRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    @Transactional
     public CategoryResponseDTO create(CategoryCreateDTO dto) {
         Category category = CategoryMapper.toEntity(dto);
         return CategoryMapper.toDTO(categoryRepository.save(category));
@@ -36,6 +38,7 @@ public class CategoryService {
         return CategoryMapper.toDTOCatWithBooks(category);
     }
 
+    @Transactional
     public CategoryResponseDTO update(Long id, CategoryCreateDTO dto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Catégorie introuvable pour l'id : " + id));
@@ -45,6 +48,7 @@ public class CategoryService {
         return CategoryMapper.toDTO(categoryRepository.save(category));
     }
 
+    @Transactional
     public void delete(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new RuntimeException("Catégorie introuvable pour l'id : " + id);
