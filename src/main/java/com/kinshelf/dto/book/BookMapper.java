@@ -2,6 +2,7 @@ package com.kinshelf.dto.book;
 
 import com.kinshelf.dto.author.AuthorResponseDTO;
 import com.kinshelf.dto.author.AuthorResponseWithRoleDTO;
+import com.kinshelf.dto.bookAuthor.BookAuthorCreateDTO;
 import com.kinshelf.dto.bookUser.BUWithUserNameDTO;
 import com.kinshelf.dto.category.CategoryMapper;
 import com.kinshelf.dto.category.CategoryResponseDTO;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -193,17 +196,36 @@ public class BookMapper {
         }
     }
     private void updateAuthors(Book book, BookCreateDTO dto) {
-        book.getBookAuthors().clear();
-        if (dto.authors() != null) {
-            List<BookAuthor> newAuthors = dto.authors().stream().map(a -> {
-                Author author = authorRepository.findById(a.authorId()).orElseThrow();
+        if (dto.authors() == null) {
+            book.getBookAuthors().clear();
+            return;
+        }
+        // on créer une Map avec les nouveaux auteurs
+        Map<Long, BookAuthorCreateDTO> nouveauxAuteurs = dto.authors().stream()
+                .collect(Collectors.toMap(BookAuthorCreateDTO::authorId, a -> a));
+        // on regarde avec les anciens auteurs et on supprime ceux qui ne sont pas dans la Map
+        book.getBookAuthors().removeIf(ba -> !nouveauxAuteurs.containsKey(ba.getAuthor().getId()));
+
+        // on ajoute les nouveaux
+        for (BookAuthorCreateDTO authorDto : dto.authors()) {
+            Optional<BookAuthor> existing = book.getBookAuthors().stream()
+                    .filter(ba -> ba.getAuthor().getId().equals(authorDto.authorId()))
+                    .findFirst();
+
+            if (existing.isPresent()) {
+                // pour les anciens on met le role à jour
+                existing.get().setRole(authorDto.role());
+            } else {
+                // pour les nouveaux on les créer
+                Author author = authorRepository.findById(authorDto.authorId()).orElseThrow();
                 BookAuthor ba = new BookAuthor();
+                BookAuthorId id = new BookAuthorId(book.getId(), author.getId());
+                ba.setId(id);
                 ba.setBook(book);
                 ba.setAuthor(author);
-                ba.setRole(a.role());
-                return ba;
-            }).toList();
-            book.getBookAuthors().addAll(newAuthors);
+                ba.setRole(authorDto.role());
+                book.getBookAuthors().add(ba);
+            }
         }
     }
 }

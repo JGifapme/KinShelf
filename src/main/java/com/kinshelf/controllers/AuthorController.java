@@ -50,6 +50,6 @@ public class AuthorController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         authorService.delete(id);
         return ResponseEntity.noContent().build();
-        //vérifier que ça supprime les livres associés
+        //vérifier que ça supprime la table de jointure associée -> oui
     }
 }

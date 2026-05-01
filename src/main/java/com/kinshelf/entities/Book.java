@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,7 +49,7 @@ public class Book {
     private Category category;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookAuthor> bookAuthors;
+    private List<BookAuthor> bookAuthors = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -56,13 +57,13 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookUser> bookUsers;
+    private List<BookUser> bookUsers = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "book")
-    private List<Loan> loans;
+    private List<Loan> loans = new ArrayList<>();
 }

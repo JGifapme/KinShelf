@@ -1,7 +1,10 @@
 package com.kinshelf.entities;
 
 public enum AuthorRole {
+    AUTEUR,
     SCENARISTE,
     DESSINATEUR,
-    COLORISTE
+    ILLUSTRATEUR,
+    COLORISTE,
+    AUTEUR_COMPLET
 }

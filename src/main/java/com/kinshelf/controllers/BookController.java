@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
+//@CrossOrigin(origins = "http://localhost:5173")
 public class BookController {
 
     private final BookService bookService;
@@ -41,6 +42,7 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<BookWithUsersInputDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(bookService.findById(id));
+        //retourner la liste des utilisateurs qui l'ont, l'ont lu -> Fait!
     }
 
     //juste les admins
@@ -57,6 +59,7 @@ public class BookController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         bookService.delete(id);
         return ResponseEntity.noContent().build();
+        //vérifier que ça supprime bien les tables intermédiaires : bookAuthor, bookUser, Loan, bookGenres
     }
 
 
@@ -69,11 +72,10 @@ public class BookController {
             @PathVariable Long userId,
             @Valid @RequestBody BookUserCreateDTO bookUserCreateDTO) {
         bookUserService.upCreate(new BookUserId(bookId, userId), bookUserCreateDTO);
+        //Update ou créer l'entrée : 1 seul endpoint pour les 2
         return ResponseEntity.ok(bookService.findById(bookId));
     }
     // si on le possède, la note, le commentaire,
     // seulement le permettre pour l'utilisateur identifié, récupérer son id via spring security
-
-    //
 
 }

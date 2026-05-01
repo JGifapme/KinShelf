@@ -3,6 +3,7 @@ package com.kinshelf.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,5 +32,5 @@ public class Author {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<BookAuthor> bookAuthors;
+    private List<BookAuthor> bookAuthors = new ArrayList<>();
 }

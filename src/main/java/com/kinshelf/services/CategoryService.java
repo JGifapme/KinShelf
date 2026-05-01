@@ -5,6 +5,7 @@ import com.kinshelf.dto.category.CategoryMapper;
 import com.kinshelf.dto.category.CategoryResponseDTO;
 import com.kinshelf.dto.category.CategoryWithBooksDTO;
 import com.kinshelf.entities.Category;
+import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class CategoryService {
 
     public CategoryWithBooksDTO findById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Catégorie introuvable pour l'id : " + id));
+                .orElseThrow(() -> new NotFoundException("Catégorie introuvable pour l'id : " + id));
 
         return CategoryMapper.toDTOCatWithBooks(category);
     }
@@ -41,7 +42,7 @@ public class CategoryService {
     @Transactional
     public CategoryResponseDTO update(Long id, CategoryCreateDTO dto) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Catégorie introuvable pour l'id : " + id));
+                .orElseThrow(() -> new NotFoundException("Catégorie introuvable pour l'id : " + id));
 
         CategoryMapper.updateEntity(category, dto);
 
@@ -51,7 +52,7 @@ public class CategoryService {
     @Transactional
     public void delete(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new RuntimeException("Catégorie introuvable pour l'id : " + id);
+            throw new NotFoundException("Catégorie introuvable pour l'id : " + id);
         }
 
         categoryRepository.deleteById(id);

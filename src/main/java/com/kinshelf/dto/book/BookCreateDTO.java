@@ -1,5 +1,6 @@
 package com.kinshelf.dto.book;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kinshelf.dto.bookAuthor.BookAuthorCreateDTO;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public record BookCreateDTO(
 
         String coverUrl,
 
+        @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate publicationDate,
 
         Long publisherId,

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,13 +38,13 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookUser> bookUsers;
+    private List<BookUser> bookUsers = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "owner")
-    private List<Loan> ownedLoans;
+    private List<Loan> ownedLoans = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "borrower")
-    private List<Loan> borrowedLoans;
+    private List<Loan> borrowedLoans = new ArrayList<>();
 }

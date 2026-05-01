@@ -2,6 +2,8 @@ package com.kinshelf.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,5 +25,5 @@ public class Category {
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 }

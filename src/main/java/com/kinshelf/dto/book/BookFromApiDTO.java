@@ -1,5 +1,6 @@
 package com.kinshelf.dto.book;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public record BookFromApiDTO(
@@ -9,5 +10,6 @@ public record BookFromApiDTO(
         String description,
         String isbn,
         Integer pageCount,
-        String imageUrl
+        String imageUrl,
+        String publicationDate
 ) {}

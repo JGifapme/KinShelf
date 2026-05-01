@@ -4,9 +4,12 @@ import com.kinshelf.dto.book.BookFromApiDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class DataFromOtherApiService {
@@ -65,6 +68,11 @@ public class DataFromOtherApiService {
                 imageUrl = openLibraryDto.imageUrl();
             }else {imageUrl = googleDto.imageUrl();}
 
+            String date;
+            if (openLibraryDto.publicationDate() != null && !openLibraryDto.publicationDate().isEmpty()) {
+                date = openLibraryDto.publicationDate();
+            }else {date = googleDto.publicationDate();}
+
             BookFromApiDTO dto = new BookFromApiDTO(
                         title,
                         publisher,
@@ -72,7 +80,8 @@ public class DataFromOtherApiService {
                         description,
                         isbn,
                         pageCount,
-                        imageUrl
+                        imageUrl,
+                        date
                 );
             return dto;
         }
@@ -108,6 +117,11 @@ public class DataFromOtherApiService {
                 imageUrl = covers.get("medium");
             }
 
+            //la date
+            String rawDate = (String) bookData.get("publish_date"); // Pour OpenLibrary
+// ou (String) volumeInfo.get("publishedDate"); // Pour Google
+            String formattedDate = normalizeDate(rawDate);
+
             return new BookFromApiDTO(
                     (String) bookData.get("title"),
                     bookData.containsKey("publishers") ? ((List<Map<String, String>>) bookData.get("publishers")).get(0).get("name") : null,
@@ -115,7 +129,8 @@ public class DataFromOtherApiService {
                     (String) bookData.get("description"),
                     isbn,
                     (Integer) bookData.get("number_of_pages"),
-                    imageUrl
+                    imageUrl,
+                    formattedDate
             );
         } catch (Exception e) {
             //si il y a un problème on ne renvoie rien et l'utilisateur devra ajouter toutes les infos manuellement
@@ -144,6 +159,10 @@ public class DataFromOtherApiService {
                 imageUrl = imageLinks.get("thumbnail");
             }
 
+            //la date
+            String rawDate = (String) volumeInfo.get("publishedDate");
+            String formattedDate = normalizeDate(rawDate);
+
             //ensuite on renvoie un dto qui servira à pré-remplir les champs lorsqu'un utilisateur ajoute un livre
             return new BookFromApiDTO(
                     (String) volumeInfo.get("title"),
@@ -152,11 +171,32 @@ public class DataFromOtherApiService {
                     (String) volumeInfo.get("description"),
                     isbn,
                     (Integer) volumeInfo.get("pageCount"),
-                    imageUrl
+                    imageUrl,
+                    formattedDate
             );
         } catch (Exception e) {
             //si il y a un problème on ne renvoie rien et l'utilisateur devra ajouter toutes les infos manuellement
             return null;
         }
+    }
+
+    //Méthode pour transformer la date dans le bon format
+    private String normalizeDate(String rawDate) {
+        if (rawDate == null || rawDate.isEmpty()) return null;
+
+        // Si le format de la date est bon on le garde
+        if (rawDate.matches("\\d{4}-\\d{2}-\\d{2}")) return rawDate;
+
+        // Si on n'a que l'année, on met au 1er janvier
+        if (rawDate.matches("\\d{4}")) return rawDate + "-01-01";
+
+        // Si c'est en texte, on récupère l'année et on met au premier janvier, à adapter pour faire mieux
+        Pattern pattern = Pattern.compile("(\\d{4})");
+        Matcher matcher = pattern.matcher(rawDate);
+        if (matcher.find()) {
+            return matcher.group(1) + "-01-01";
+        }
+
+        return null;
     }
 }

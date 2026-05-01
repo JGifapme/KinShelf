@@ -5,6 +5,7 @@ import com.kinshelf.dto.publisher.PublisherMapper;
 import com.kinshelf.dto.publisher.PublisherResponseDTO;
 import com.kinshelf.dto.publisher.PublisherWithBooksDTO;
 import com.kinshelf.entities.Publisher;
+import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.PublisherRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class PublisherService {
 
     public PublisherWithBooksDTO findById(Long id) {
         Publisher publisher = publisherRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Éditeur non trouvé pour l'id : " + id));
+                .orElseThrow(() -> new NotFoundException("Éditeur non trouvé pour l'id : " + id));
 
         return PublisherMapper.toDTOPublisherWithBooks(publisher);
     }
@@ -41,7 +42,7 @@ public class PublisherService {
     @Transactional
     public PublisherResponseDTO update(Long id, PublisherCreateDTO dto) {
         Publisher publisher = publisherRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Éditeur non trouvé pour l'id : " + id));
+                .orElseThrow(() -> new NotFoundException("Éditeur non trouvé pour l'id : " + id));
 
         PublisherMapper.updateEntity(publisher, dto);
 
@@ -51,7 +52,7 @@ public class PublisherService {
     @Transactional
     public void delete(Long id) {
         if (!publisherRepository.existsById(id)) {
-            throw new RuntimeException("Éditeur non trouvé pour l'id : " + id);
+            throw new NotFoundException("Éditeur non trouvé pour l'id : " + id);
         }
         publisherRepository.deleteById(id);
     }

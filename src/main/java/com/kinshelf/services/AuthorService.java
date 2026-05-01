@@ -5,6 +5,8 @@ import com.kinshelf.dto.author.AuthorMapper;
 import com.kinshelf.dto.author.AuthorResponseDTO;
 import com.kinshelf.dto.author.AuthorWithBooksDTO;
 import com.kinshelf.entities.Author;
+import com.kinshelf.exceptions.BadRequestException;
+import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.AuthorRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,7 @@ public class AuthorService {
 
     public AuthorWithBooksDTO findById(Long id) {
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("L'auteur introuvable pour l'id : " + id));
+                .orElseThrow(() -> new NotFoundException("L'auteur introuvable pour l'id : " + id));
 
         return AuthorMapper.toDTOWithBooks(author);
     }
@@ -42,7 +44,7 @@ public class AuthorService {
     @Transactional
     public AuthorResponseDTO update(Long id, AuthorCreateDTO dto) {
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("L'auteur introuvable pour l'id : " + id));
+                .orElseThrow(() -> new NotFoundException("L'auteur introuvable pour l'id : " + id));
 
         AuthorMapper.updateEntity(author, dto);
 
@@ -52,10 +54,15 @@ public class AuthorService {
 
     @Transactional
     public void delete(Long id) {
-        if (!authorRepository.existsById(id)) {
-            throw new RuntimeException("L'auteur introuvable pour l'id : " + id);
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("L'auteur introuvable pour l'id : " + id));
+        // avant de supprimer l'auteur on vérifie qu'il n'aie plus de livre liés :
+        if (!author.getBookAuthors().isEmpty()) {
+            throw new BadRequestException("Impossible de supprimer l'auteur : il est encore lié à "
+                    + author.getBookAuthors().size() + " livre(s).");
         }
-
+        //si il n'y a plus de livres liés on supprime
         authorRepository.deleteById(id);
     }
+
 }
