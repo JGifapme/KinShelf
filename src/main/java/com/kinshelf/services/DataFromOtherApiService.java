@@ -117,7 +117,7 @@ public class DataFromOtherApiService {
             String imageUrl = null;
             if (bookData.containsKey("cover")) {
                 Map<String, String> covers = (Map<String, String>) bookData.get("cover");
-                imageUrl = covers.get("large");
+                imageUrl = covers.get("medium");
             }
 
             //la date

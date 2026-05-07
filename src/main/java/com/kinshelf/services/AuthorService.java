@@ -10,6 +10,7 @@ import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.AuthorRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,14 @@ public class AuthorService {
 
     @Transactional
     public AuthorResponseDTO create(AuthorCreateDTO dto) {
+
+        String slug = Slugify.toSlug(dto.firstName() + "-" + dto.lastName());
+        // vérifier que le slug est unique
+        while (authorRepository.existsBySlug(slug)) {
+            throw new BadRequestException("L'url associée existe déjà.");
+        }
         Author author = AuthorMapper.toEntity(dto);
+        author.setSlug(slug);
         Author saved = authorRepository.save(author);
         return AuthorMapper.toDTO(saved);
     }
@@ -37,6 +45,13 @@ public class AuthorService {
     public AuthorWithBooksDTO findById(Long id) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("L'auteur introuvable pour l'id : " + id));
+
+        return AuthorMapper.toDTOWithBooks(author);
+    }
+
+    public @Nullable AuthorWithBooksDTO findBySlug(String slug) {
+        Author author = authorRepository.findBySlug(slug)
+                .orElseThrow(() -> new NotFoundException("L'auteur introuvable pour cette url."));
 
         return AuthorMapper.toDTOWithBooks(author);
     }
@@ -64,5 +79,4 @@ public class AuthorService {
         //si il n'y a plus de livres liés on supprime
         authorRepository.deleteById(id);
     }
-
 }

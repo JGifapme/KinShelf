@@ -31,9 +31,13 @@ public class PublisherController {
     }
 
     //n'importe quel user identifié
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<PublisherWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(publisherService.findById(id));
+    }
+    @GetMapping("/{slug}")
+    public ResponseEntity<PublisherWithBooksDTO> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(publisherService.findBySlug(slug));
     }
 
     //admin seulement

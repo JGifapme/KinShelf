@@ -23,6 +23,9 @@ public class Category {
     @Column(nullable = false, length = 150)
     private String name;
 
+    @Column(nullable = false, length = 150)
+    private String slug;
+
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Book> books = new ArrayList<>();

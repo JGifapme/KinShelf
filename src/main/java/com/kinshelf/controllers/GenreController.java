@@ -31,9 +31,13 @@ public class GenreController {
     }
 
     //n'importe quel user identifié
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<GenreWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(genreService.findById(id));
+    }
+    @GetMapping("/{slug}")
+    public ResponseEntity<GenreWithBooksDTO> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(genreService.findBySlug(slug));
     }
 
     //juste admins

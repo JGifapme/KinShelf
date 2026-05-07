@@ -5,10 +5,12 @@ import com.kinshelf.dto.book.BookMapper;
 import com.kinshelf.dto.book.BookResponseDTO;
 import com.kinshelf.dto.book.BookWithUsersInputDTO;
 import com.kinshelf.entities.*;
+import com.kinshelf.exceptions.BadRequestException;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,14 @@ public class BookService {
 
     @Transactional
     public BookResponseDTO create(BookCreateDTO dto) {
+        String slug = Slugify.toSlug(dto.title());
+        // vérifier que le slug est unique
+        while (bookRepository.existsBySlug(slug)) {
+            throw new BadRequestException("L'url associée existe déjà.");
+        }
+
         Book book = new Book();
+        book.setSlug(slug);
         bookMapper.updateEntityFromDTO(book, dto);
 
         return bookMapper.toDTO(bookRepository.save(book));
@@ -43,6 +52,12 @@ public class BookService {
     public BookWithUsersInputDTO findById(Long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livre introuvable pour l'id : " + id));
+
+        return bookMapper.toDTOWithUsersInput(book);
+    }
+    public BookWithUsersInputDTO findBySlug(String slug) {
+        Book book = bookRepository.findBySlug(slug)
+                .orElseThrow(() -> new NotFoundException("Livre introuvable pour cette url."));
 
         return bookMapper.toDTOWithUsersInput(book);
     }
@@ -64,4 +79,6 @@ public class BookService {
         bookMapper.updateEntityFromDTO(book, dto);
         return bookMapper.toDTO(bookRepository.save(book));
     }
+
+
 }

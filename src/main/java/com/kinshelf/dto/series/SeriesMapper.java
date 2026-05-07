@@ -19,6 +19,7 @@ public class SeriesMapper {
         return new SeriesResponseDTO(
                 series.getId(),
                 series.getName(),
+                series.getSlug(),
                 series.getStatus()
         );
     }
@@ -69,6 +70,7 @@ public class SeriesMapper {
             BookTitleAndImgDTO dto = new BookTitleAndImgDTO(
                     book.getId(),
                     book.getTitle(),
+                    book.getSlug(),
                     book.getCoverUrl()
             );
             bookTitles.add(dto);

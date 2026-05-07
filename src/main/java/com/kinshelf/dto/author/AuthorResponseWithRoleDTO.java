@@ -5,5 +5,6 @@ public record AuthorResponseWithRoleDTO(
         String firstName,
         String lastName,
         String fullName,
+        String slug,
         String role
 ) {}

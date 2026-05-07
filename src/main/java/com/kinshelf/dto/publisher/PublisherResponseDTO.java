@@ -2,5 +2,6 @@ package com.kinshelf.dto.publisher;
 
 public record PublisherResponseDTO(
         Long id,
-        String name
+        String name,
+        String slug
 ) {}

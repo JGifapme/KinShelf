@@ -31,9 +31,13 @@ public class SeriesController {
     }
 
     //n'importe quel user identifié
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<SeriesWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(seriesService.findById(id));
+    }
+    @GetMapping("/{slug}")
+    public ResponseEntity<SeriesWithBooksDTO> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(seriesService.findBySlug(slug));
     }
 
     //admin suelement

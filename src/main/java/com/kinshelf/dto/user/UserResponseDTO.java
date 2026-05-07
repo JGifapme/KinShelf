@@ -6,5 +6,6 @@ public record UserResponseDTO(
         Long id,
         String firstName,
         String lastName,
+        String slug,
         LocalDate dateOfBirth
 ) {}

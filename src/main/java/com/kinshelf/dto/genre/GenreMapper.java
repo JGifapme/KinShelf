@@ -16,7 +16,8 @@ public class GenreMapper {
 
         return new GenreResponseDTO(
                 genre.getId(),
-                genre.getName()
+                genre.getName(),
+                genre.getSlug()
         );
     }
 
@@ -60,6 +61,7 @@ public class GenreMapper {
             BookTitleAndImgDTO dto = new BookTitleAndImgDTO(
                     book.getId(),
                     book.getTitle(),
+                    book.getSlug(),
                     book.getCoverUrl()
             );
             bookTitles.add(dto);

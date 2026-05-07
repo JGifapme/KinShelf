@@ -5,10 +5,12 @@ import com.kinshelf.dto.series.SeriesMapper;
 import com.kinshelf.dto.series.SeriesResponseDTO;
 import com.kinshelf.dto.series.SeriesWithBooksDTO;
 import com.kinshelf.entities.Series;
+import com.kinshelf.exceptions.BadRequestException;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.SeriesRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,13 @@ public class SeriesService {
 
     @Transactional
     public SeriesResponseDTO create(SeriesCreateDTO dto) {
+        String slug = Slugify.toSlug(dto.name());
+        // vérifier que le slug est unique
+        while (seriesRepository.existsBySlug(slug)) {
+            throw new BadRequestException("L'url associée existe déjà.");
+        }
         Series series = SeriesMapper.toEntity(dto);
+        series.setSlug(slug);
         return SeriesMapper.toDTO(seriesRepository.save(series));
     }
     
@@ -36,6 +44,11 @@ public class SeriesService {
         Series series = seriesRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Série introuvable pour l'id : " + id));
 
+        return SeriesMapper.toDTOSeriesWithBooks(series);
+    }
+    public SeriesWithBooksDTO findBySlug(String slug) {
+        Series series = seriesRepository.findBySlug(slug)
+                .orElseThrow(() -> new NotFoundException("Série introuvable pour cette url."));
         return SeriesMapper.toDTOSeriesWithBooks(series);
     }
 

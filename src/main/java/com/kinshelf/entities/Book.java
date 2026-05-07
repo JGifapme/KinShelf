@@ -25,6 +25,12 @@ public class Book {
     @Column(nullable = false, length = 255)
     private String title;
 
+    @Column(nullable = false, length = 255)
+    private String slug;
+
+    @Column(length = 25)
+    private Integer isbn;
+
     private String description;
 
     @Column(name = "nb_pages")

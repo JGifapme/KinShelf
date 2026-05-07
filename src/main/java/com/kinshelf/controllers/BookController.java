@@ -1,5 +1,6 @@
 package com.kinshelf.controllers;
 
+import com.kinshelf.dto.author.AuthorWithBooksDTO;
 import com.kinshelf.dto.book.BookCreateDTO;
 import com.kinshelf.dto.book.BookResponseDTO;
 import com.kinshelf.dto.book.BookTitleAndImgDTO;
@@ -39,10 +40,14 @@ public class BookController {
     }
 
     //n'importe quel user identifié
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<BookWithUsersInputDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(bookService.findById(id));
         //retourner la liste des utilisateurs qui l'ont, l'ont lu -> Fait!
+    }
+    @GetMapping("/{slug}")
+    public ResponseEntity<BookWithUsersInputDTO> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(bookService.findBySlug(slug));
     }
 
     //juste les admins

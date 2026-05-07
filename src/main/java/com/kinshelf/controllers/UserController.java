@@ -27,9 +27,13 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll());
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<UserResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
+    }
+    @GetMapping("/{slug}")
+    public ResponseEntity<UserResponseDTO> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(userService.findBySlug(slug));
     }
     
     @PatchMapping("/{id}")

@@ -23,6 +23,9 @@ public class Publisher {
     @Column(nullable = false, length = 150)
     private String name;
 
+    @Column(nullable = false, length = 150)
+    private String slug;
+
     @JsonIgnore
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
     private List<Book> books = new ArrayList<>();

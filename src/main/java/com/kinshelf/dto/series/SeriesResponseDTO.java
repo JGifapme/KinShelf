@@ -5,5 +5,6 @@ import com.kinshelf.entities.SeriesStatus;
 public record SeriesResponseDTO(
         Long id,
         String name,
+        String slug,
         SeriesStatus status
 ) {}

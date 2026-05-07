@@ -14,6 +14,8 @@ import java.util.List;
 public record BookWithUsersInputDTO (
         Long id,
         String title,
+        String slug,
+        Integer isbn,
         String description,
         Integer numberOfPages,
         String coverUrl,

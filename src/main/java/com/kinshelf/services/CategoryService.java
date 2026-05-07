@@ -5,10 +5,12 @@ import com.kinshelf.dto.category.CategoryMapper;
 import com.kinshelf.dto.category.CategoryResponseDTO;
 import com.kinshelf.dto.category.CategoryWithBooksDTO;
 import com.kinshelf.entities.Category;
+import com.kinshelf.exceptions.BadRequestException;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,13 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponseDTO create(CategoryCreateDTO dto) {
+        String slug = Slugify.toSlug(dto.name());
+        // vérifier que le slug est unique
+        while (categoryRepository.existsBySlug(slug)) {
+            throw new BadRequestException("L'url associée existe déjà.");
+        }
         Category category = CategoryMapper.toEntity(dto);
+        category.setSlug(slug);
         return CategoryMapper.toDTO(categoryRepository.save(category));
     }
 
@@ -35,6 +43,12 @@ public class CategoryService {
     public CategoryWithBooksDTO findById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Catégorie introuvable pour l'id : " + id));
+
+        return CategoryMapper.toDTOCatWithBooks(category);
+    }
+    public CategoryWithBooksDTO findBySlug(String slug) {
+        Category category = categoryRepository.findBySlug(slug)
+                .orElseThrow(() -> new NotFoundException("Catégorie introuvable pour cette url."));
 
         return CategoryMapper.toDTOCatWithBooks(category);
     }

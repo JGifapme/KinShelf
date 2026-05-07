@@ -22,7 +22,8 @@ public class AuthorMapper {
                 author.getId(),
                 author.getFirstName(),
                 author.getLastName(),
-                author.getFirstName() + " " + author.getLastName()
+                author.getFirstName() + " " + author.getLastName(),
+                author.getSlug()
         );
     }
 
@@ -70,6 +71,7 @@ public class AuthorMapper {
             BookTitleAndImgDTO dto = new BookTitleAndImgDTO(
                     book.getId(),
                     book.getTitle(),
+                    book.getSlug(),
                     book.getCoverUrl()
             );
             bookTitles.add(dto);

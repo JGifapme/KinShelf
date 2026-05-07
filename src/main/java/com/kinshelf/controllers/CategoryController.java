@@ -31,9 +31,13 @@ public class CategoryController {
     }
 
     //n'importe quel user identifié
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<CategoryWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.findById(id));
+    }
+    @GetMapping("/{slug}")
+    public ResponseEntity<CategoryWithBooksDTO> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(categoryService.findBySlug(slug));
     }
 
     //juste les admins

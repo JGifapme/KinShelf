@@ -39,6 +39,7 @@ public class BookMapper {
         return new BookResponseDTO(
                 book.getId(),
                 book.getTitle(),
+                book.getSlug(),
                 book.getDescription(),
                 book.getNumberOfPages(),
                 book.getCoverUrl(),
@@ -63,6 +64,8 @@ public class BookMapper {
         return new BookWithUsersInputDTO(
                 book.getId(),
                 book.getTitle(),
+                book.getSlug(),
+                book.getIsbn(),
                 book.getDescription(),
                 book.getNumberOfPages(),
                 book.getCoverUrl(),
@@ -118,6 +121,7 @@ public class BookMapper {
                             author.getFirstName(),
                             author.getLastName(),
                             author.getFirstName() + " " + author.getLastName(),
+                            author.getSlug(),
                             roleName
                     );
                 })
@@ -131,7 +135,7 @@ public class BookMapper {
 
         return book.getGenres()
                 .stream()
-                .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName()))
+                .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName(), genre.getSlug()))
                 .collect(Collectors.toList());
     }
     private List<BUWithUserNameDTO> mapBookUser(Book book) {

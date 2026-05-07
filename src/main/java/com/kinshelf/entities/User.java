@@ -27,6 +27,9 @@ public class User {
     @Column(name = "lname", nullable = false, length = 75)
     private String lastName;
 
+    @Column(nullable = false, length = 150)
+    private String slug;
+
     @Column(name = "dob", nullable = false)
     private LocalDate dateOfBirth;
 

@@ -18,7 +18,8 @@ public class PublisherMapper {
 
         return new PublisherResponseDTO(
                 publisher.getId(),
-                publisher.getName()
+                publisher.getName(),
+                publisher.getSlug()
         );
     }
 
@@ -61,6 +62,7 @@ public class PublisherMapper {
             BookTitleAndImgDTO dto = new BookTitleAndImgDTO(
                     book.getId(),
                     book.getTitle(),
+                    book.getSlug(),
                     book.getCoverUrl()
             );
             bookTitles.add(dto);

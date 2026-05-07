@@ -31,9 +31,14 @@ public class AuthorController {
     }
 
     //n'importe quel user identifié
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<AuthorWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(authorService.findById(id));
+    }
+
+    @GetMapping("/{slug}")
+    public ResponseEntity<AuthorWithBooksDTO> getBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(authorService.findBySlug(slug));
     }
 
     //juste admin

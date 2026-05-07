@@ -19,7 +19,8 @@ public class CategoryMapper {
 
         return new CategoryResponseDTO(
                 category.getId(),
-                category.getName()
+                category.getName(),
+                category.getSlug()
         );
     }
 
@@ -63,6 +64,7 @@ public class CategoryMapper {
             BookTitleAndImgDTO dto = new BookTitleAndImgDTO(
                     book.getId(),
                     book.getTitle(),
+                    book.getSlug(),
                     book.getCoverUrl()
             );
             bookTitles.add(dto);

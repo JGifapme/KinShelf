@@ -5,10 +5,12 @@ import com.kinshelf.dto.publisher.PublisherMapper;
 import com.kinshelf.dto.publisher.PublisherResponseDTO;
 import com.kinshelf.dto.publisher.PublisherWithBooksDTO;
 import com.kinshelf.entities.Publisher;
+import com.kinshelf.exceptions.BadRequestException;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.PublisherRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,13 @@ public class PublisherService {
 
     @Transactional
     public PublisherResponseDTO create(PublisherCreateDTO dto) {
+        String slug = Slugify.toSlug(dto.name());
+        // vérifier que le slug est unique
+        while (publisherRepository.existsBySlug(slug)) {
+            throw new BadRequestException("L'url associée existe déjà.");
+        }
         Publisher publisher = PublisherMapper.toEntity(dto);
+        publisher.setSlug(slug);
         return PublisherMapper.toDTO(publisherRepository.save(publisher));
     }
 
@@ -35,7 +43,11 @@ public class PublisherService {
     public PublisherWithBooksDTO findById(Long id) {
         Publisher publisher = publisherRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Éditeur non trouvé pour l'id : " + id));
-
+        return PublisherMapper.toDTOPublisherWithBooks(publisher);
+    }
+    public PublisherWithBooksDTO findBySlug(String slug) {
+        Publisher publisher = publisherRepository.findBySlug(slug)
+                .orElseThrow(() -> new NotFoundException("Éditeur non trouvé pour cette url."));
         return PublisherMapper.toDTOPublisherWithBooks(publisher);
     }
 
