@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,12 +117,11 @@ public class DataFromOtherApiService {
             String imageUrl = null;
             if (bookData.containsKey("cover")) {
                 Map<String, String> covers = (Map<String, String>) bookData.get("cover");
-                imageUrl = covers.get("medium");
+                imageUrl = covers.get("large");
             }
 
             //la date
-            String rawDate = (String) bookData.get("publish_date"); // Pour OpenLibrary
-// ou (String) volumeInfo.get("publishedDate"); // Pour Google
+            String rawDate = (String) bookData.get("publish_date");
             String formattedDate = normalizeDate(rawDate);
 
             return new BookFromApiDTO(
@@ -184,18 +186,42 @@ public class DataFromOtherApiService {
     private String normalizeDate(String rawDate) {
         if (rawDate == null || rawDate.isEmpty()) return null;
 
-        // Si le format de la date est bon on le garde
-        if (rawDate.matches("\\d{4}-\\d{2}-\\d{2}")) return rawDate;
+        // on remplace les points et on normalise les espaces
+        String dateStr = rawDate.trim().replace(".", "");
 
-        // Si on n'a que l'année, on met au 1er janvier
-        if (rawDate.matches("\\d{4}")) return rawDate + "-01-01";
-
-        // Si c'est en texte, on récupère l'année et on met au premier janvier, à adapter pour faire mieux
-        Pattern pattern = Pattern.compile("(\\d{4})");
-        Matcher matcher = pattern.matcher(rawDate);
-        if (matcher.find()) {
-            return matcher.group(1) + "-01-01";
+        // AAAA-MM ou AAAA MM -> on transforme en AAAA-MM-01
+        if (dateStr.matches("\\d{4}[- ]\\d{2}")) {
+            return dateStr.replace(" ", "-") + "-01";
         }
+
+        // Liste des formats du plus précis au plus vague
+        String[] formats = {
+                "yyyy-MM-dd",    // 2026-05-02
+                "MMM dd, yyyy",  // Mar 07, 2018
+                "MMMM d, yyyy",  // June 7, 1996 ou September 4, 2003
+                "d MMMM yyyy",   // 12 Octobre 2023
+                "yyyy"           // 2023
+        };
+
+        //pour chaque format :
+        for (String format : formats) {
+            try {
+                if (format.equals("yyyy")) {//si on a que l'année on met au premier janvier
+                    if (dateStr.matches("\\d{4}")) return dateStr + "-01-01";
+                } else {//sinon on transforme en LocalDate
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format, Locale.US);
+                    LocalDate date = LocalDate.parse(dateStr, formatter);
+                    return date.toString();
+                }
+            } catch (DateTimeParseException e) {
+                // Si ça ne fonctionne pas on test le format suivant
+            }
+        }
+
+        // Dans le pire des cas si la chaine de caractère n'est pas reconnue on essaie de récupérer l'année et on met au 1 er janvier
+        Pattern p = Pattern.compile("(\\d{4})");
+        Matcher m = p.matcher(dateStr);
+        if (m.find()) return m.group(1) + "-01-01";
 
         return null;
     }
