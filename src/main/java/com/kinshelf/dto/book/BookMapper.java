@@ -40,6 +40,7 @@ public class BookMapper {
                 book.getId(),
                 book.getTitle(),
                 book.getSlug(),
+                book.getIsbn(),
                 book.getDescription(),
                 book.getNumberOfPages(),
                 book.getCoverUrl(),
@@ -160,11 +161,24 @@ public class BookMapper {
     }
 
     public void updateEntityFromDTO(Book book, BookCreateDTO dto) {
-        book.setTitle(dto.title());
-        book.setDescription(dto.description());
-        book.setNumberOfPages(dto.numberOfPages());
-        book.setCoverUrl(dto.coverUrl());
-        book.setPublicationDate(dto.publicationDate());
+        if (dto.title() != null && !dto.title().isEmpty()) {
+            book.setTitle(dto.title());
+        }
+        if (dto.isbn() != null && !dto.isbn().isEmpty()) {
+            book.setIsbn(dto.isbn());
+        }
+        if (dto.description() != null) {
+            book.setDescription(dto.description());
+        }
+        if (dto.numberOfPages() != null && dto.numberOfPages() >= 0) {
+            book.setNumberOfPages(dto.numberOfPages());
+        }
+        if (dto.coverUrl() != null && !dto.coverUrl().isEmpty()) {
+            book.setCoverUrl(dto.coverUrl());
+        }
+        if (dto.publicationDate() != null) {
+            book.setPublicationDate(dto.publicationDate());
+        }
 
         if (dto.publisherId() != null) {
             Publisher publisher = publisherRepository.findById(dto.publisherId())

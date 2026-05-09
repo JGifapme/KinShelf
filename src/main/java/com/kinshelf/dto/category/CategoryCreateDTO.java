@@ -3,7 +3,7 @@ package com.kinshelf.dto.category;
 import jakarta.validation.constraints.NotBlank;
 
 public record CategoryCreateDTO(
-        @NotBlank
+        @NotBlank(message = "Le nom est obligatoire")
         String name
 
 ) {}

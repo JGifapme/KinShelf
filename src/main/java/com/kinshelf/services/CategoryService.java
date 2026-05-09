@@ -26,7 +26,7 @@ public class CategoryService {
         String slug = Slugify.toSlug(dto.name());
         // vérifier que le slug est unique
         while (categoryRepository.existsBySlug(slug)) {
-            throw new BadRequestException("L'url associée existe déjà.");
+            throw new BadRequestException("L'url associée existe déjà. Vérifiez qu'une catégorie d'ouvrage avec un nom similaire n'existe pas déjà.");
         }
         Category category = CategoryMapper.toEntity(dto);
         category.setSlug(slug);

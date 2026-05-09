@@ -26,7 +26,7 @@ public class PublisherService {
         String slug = Slugify.toSlug(dto.name());
         // vérifier que le slug est unique
         while (publisherRepository.existsBySlug(slug)) {
-            throw new BadRequestException("L'url associée existe déjà.");
+            throw new BadRequestException("L'url associée existe déjà. Vérifier qu'un éditeur avec un nom similaire n'existe pas déjà.");
         }
         Publisher publisher = PublisherMapper.toEntity(dto);
         publisher.setSlug(slug);

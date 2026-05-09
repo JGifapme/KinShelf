@@ -15,7 +15,7 @@ public record BookWithUsersInputDTO (
         Long id,
         String title,
         String slug,
-        Integer isbn,
+        String isbn,
         String description,
         Integer numberOfPages,
         String coverUrl,

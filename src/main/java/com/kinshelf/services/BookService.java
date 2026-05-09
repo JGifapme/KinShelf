@@ -32,9 +32,13 @@ public class BookService {
         String slug = Slugify.toSlug(dto.title());
         // vérifier que le slug est unique
         while (bookRepository.existsBySlug(slug)) {
-            throw new BadRequestException("L'url associée existe déjà.");
+            throw new BadRequestException("L'url associée existe déjà. Vérifiez qu'un livre avec un nom similaire n'existe pas déjà.");
         }
 
+        String isbn = dto.isbn();
+        while (bookRepository.existsByIsbn(isbn)){
+            throw new BadRequestException("Cet isbn existe déjà, veuillez vérifier que le livre n'existe pas déjà sur KinShelf.");
+        }
         Book book = new Book();
         book.setSlug(slug);
         bookMapper.updateEntityFromDTO(book, dto);
@@ -43,7 +47,13 @@ public class BookService {
     }
 
     public List<BookResponseDTO> findAll() {
-        return bookRepository.findAll()
+        return bookRepository.findAllByOrderByTitleAsc()
+                .stream()
+                .map(bookMapper::toDTO)
+                .toList();
+    }
+    public List<BookResponseDTO> findAll(String search, String genreSlug, String userSlug) {
+        return bookRepository.findBookSearch(search, genreSlug, userSlug)
                 .stream()
                 .map(bookMapper::toDTO)
                 .toList();

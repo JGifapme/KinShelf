@@ -26,7 +26,7 @@ public class GenreService {
         String slug = Slugify.toSlug(dto.name());
         // vérifier que le slug est unique
         while (genreRepository.existsBySlug(slug)) {
-            throw new BadRequestException("L'url associée existe déjà.");
+            throw new BadRequestException("L'url associée existe déjà. Vérifiez qu'un genre avec un nom similaire n'existe pas déjà.");
         }
         Genre genre = GenreMapper.toEntity(dto);
         genre.setSlug(slug);

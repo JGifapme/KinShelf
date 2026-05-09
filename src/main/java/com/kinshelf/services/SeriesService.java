@@ -26,7 +26,7 @@ public class SeriesService {
         String slug = Slugify.toSlug(dto.name());
         // vérifier que le slug est unique
         while (seriesRepository.existsBySlug(slug)) {
-            throw new BadRequestException("L'url associée existe déjà.");
+            throw new BadRequestException("L'url associée existe déjà. Vérifier qu'une série avec un nom similaire n'existe pas déjà.");
         }
         Series series = SeriesMapper.toEntity(dto);
         series.setSlug(slug);

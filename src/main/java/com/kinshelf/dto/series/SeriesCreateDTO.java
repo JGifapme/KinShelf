@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 public record SeriesCreateDTO(
-        @NotBlank
+        @NotBlank(message = "Le nom est obligatoire")
         String name,
         SeriesStatus status
 ) {}

@@ -29,7 +29,7 @@ public class Book {
     private String slug;
 
     @Column(length = 25)
-    private Integer isbn;
+    private String isbn;
 
     private String description;
 

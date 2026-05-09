@@ -23,11 +23,14 @@ public class AuthorService {
 
     @Transactional
     public AuthorResponseDTO create(AuthorCreateDTO dto) {
+        if (dto.firstName().isEmpty() || dto.lastName().isEmpty()) {
+            throw new BadRequestException("Le prénom et le nom ne peuvent être vide.");
+        }
 
         String slug = Slugify.toSlug(dto.firstName() + "-" + dto.lastName());
         // vérifier que le slug est unique
         while (authorRepository.existsBySlug(slug)) {
-            throw new BadRequestException("L'url associée existe déjà.");
+            throw new BadRequestException("L'url associée existe déjà. Vérifiez qu'un auteur avec un nom similaire n'existe pas déjà.");
         }
         Author author = AuthorMapper.toEntity(dto);
         author.setSlug(slug);

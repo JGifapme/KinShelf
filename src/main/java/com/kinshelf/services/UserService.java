@@ -25,7 +25,7 @@ public class UserService {
         String slug = Slugify.toSlug(dto.firstName()+" "+dto.lastName());
         // vérifier que le slug est unique
         while (userRepository.existsBySlug(slug)) {
-            throw new BadRequestException("L'url associée existe déjà.");
+            throw new BadRequestException("L'url associée existe déjà. Vérifier que vous ne possédez pas déjà un compte.");
         }
         User user = UserMapper.toEntity(dto);
         user.setSlug(slug);

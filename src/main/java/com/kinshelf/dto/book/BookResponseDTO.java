@@ -18,6 +18,7 @@ public record BookResponseDTO(
         Long id,
         String title,
         String slug,
+        String isbn,
         String description,
         Integer numberOfPages,
         String coverUrl,

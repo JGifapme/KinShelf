@@ -8,12 +8,14 @@ import java.util.List;
 
 public record BookCreateDTO(
 
-        @NotBlank
+        @NotBlank(message = "Le titre est obligatoire")
         String title,
+
+        String isbn,
 
         String description,
 
-        @Positive
+        @Positive(message = "Le nombre de page doit être supérieur à 0.")
         Integer numberOfPages,
 
         String coverUrl,
@@ -25,7 +27,7 @@ public record BookCreateDTO(
         Long categoryId,
         Long seriesId,
 
-        @NotEmpty
+        @NotEmpty(message = "Le livre doit avoir au moins 1 auteur.")
         List<BookAuthorCreateDTO> authors,
 
         List<Long> genreIds

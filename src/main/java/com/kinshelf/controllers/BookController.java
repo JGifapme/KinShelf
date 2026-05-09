@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,9 +35,14 @@ public class BookController {
 
     //n'importe quel user identifié
     @GetMapping
-    public ResponseEntity<List<BookResponseDTO>> getAll() {
+    public ResponseEntity<List<BookResponseDTO>> getAll(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String genreSlug,
+            @RequestParam(required = false) String userSlug
+            ) {
         //Ajouter la possibilité de mettre des filtres : lu, possédé, en fonction de la note, de l'auteur, du titre,
-        return ResponseEntity.ok(bookService.findAll());
+            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug));
+
     }
 
     //n'importe quel user identifié

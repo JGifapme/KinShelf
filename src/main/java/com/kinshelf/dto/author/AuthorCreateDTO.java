@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public record AuthorCreateDTO(
 
-        @NotBlank
+        @NotBlank(message = "Le prénom est obligatoire")
         String firstName,
 
-        @NotBlank
+        @NotBlank(message = "Le nom est obligatoire")
         String lastName
 
 ) {}

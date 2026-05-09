@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record BookAuthorCreateDTO(
 
-        @NotNull
+        @NotNull(message = "Id manquant pour l'auteur.")
         Long authorId,
 
-        @NotNull
+        @NotNull(message = "L'auteur doit avoir un role.")
         AuthorRole role
 
 ) {}

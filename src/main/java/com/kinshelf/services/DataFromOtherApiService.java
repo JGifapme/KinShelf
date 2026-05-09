@@ -21,6 +21,7 @@ public class DataFromOtherApiService {
     private final RestTemplate restTemplate = new RestTemplate();
     
     public BookFromApiDTO bookByIsbn(String isbn) {
+        isbn = isbn.trim().replace("-","");
         // On teste OpenLibrary en premier car les livres en Fr semble mieux décrits
         BookFromApiDTO openLibraryDto = recupDeOpenLibrary(isbn);
 
@@ -117,7 +118,7 @@ public class DataFromOtherApiService {
             String imageUrl = null;
             if (bookData.containsKey("cover")) {
                 Map<String, String> covers = (Map<String, String>) bookData.get("cover");
-                imageUrl = covers.get("medium");
+                imageUrl = covers.get("large");
             }
 
             //la date
