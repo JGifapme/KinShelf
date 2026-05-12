@@ -147,9 +147,8 @@ public class BookMapper {
         return book.getBookUsers()
                 .stream()
                 .map(bu -> new BUWithUserNameDTO(
-                        bu.getId(),
-                        bu.getBook().getId(),
-                        bu.getUser().getId(),
+                        bu.getBook().getSlug(),
+                        bu.getUser().getSlug(),
                         bu.getUser().getFirstName()+" "+bu.getUser().getLastName(),
                         bu.getIsOwn(),
                         bu.getIsRead(),

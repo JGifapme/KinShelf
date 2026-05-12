@@ -1,6 +1,7 @@
 package com.kinshelf.controllers;
 
 import com.kinshelf.dto.book.BookFromApiDTO;
+import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.services.DataFromOtherApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class IsbnController {
         if (book != null) {
             return ResponseEntity.ok(book);
         }
-        return ResponseEntity.notFound().build();
+        else {
+            throw new NotFoundException("Livre introuvable pour cet isbn");
+        }
     }
 }

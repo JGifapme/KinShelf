@@ -30,11 +30,10 @@ public class BookService {
     @Transactional
     public BookResponseDTO create(BookCreateDTO dto) {
         String slug = Slugify.toSlug(dto.title());
-        // vérifier que le slug est unique
+        // vérifier que le slug et l'isbn sont uniques
         while (bookRepository.existsBySlug(slug)) {
             throw new BadRequestException("L'url associée existe déjà. Vérifiez qu'un livre avec un nom similaire n'existe pas déjà.");
         }
-
         String isbn = dto.isbn();
         while (bookRepository.existsByIsbn(isbn)){
             throw new BadRequestException("Cet isbn existe déjà, veuillez vérifier que le livre n'existe pas déjà sur KinShelf.");
@@ -53,7 +52,20 @@ public class BookService {
                 .toList();
     }
     public List<BookResponseDTO> findAll(String search, String genreSlug, String userSlug) {
-        return bookRepository.findBookSearch(search, genreSlug, userSlug)
+        // On vérifie que les paramètre ne soit pas vide "" ce qui pourrait provoquer des erreurs, on préfère renvoyer null
+        String searchN = search;
+        if (search == null || search.trim().isEmpty()) {
+            searchN = null;
+        }
+        String genreSlugN = genreSlug;
+        if (genreSlug == null || genreSlug.trim().isEmpty()) {
+            genreSlugN = null;
+        }
+        String userSlugN = userSlug;
+        if (userSlug == null || userSlug.trim().isEmpty()) {
+            userSlugN = null;
+        }
+        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN)
                 .stream()
                 .map(bookMapper::toDTO)
                 .toList();
@@ -86,6 +98,7 @@ public class BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livre introuvable pour l'id : " + id));
 
+        //Slug et isbn vérifier !!
         bookMapper.updateEntityFromDTO(book, dto);
         return bookMapper.toDTO(bookRepository.save(book));
     }

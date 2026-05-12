@@ -42,7 +42,6 @@ public class BookController {
             ) {
         //Ajouter la possibilité de mettre des filtres : lu, possédé, en fonction de la note, de l'auteur, du titre,
             return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug));
-
     }
 
     //n'importe quel user identifié
@@ -76,7 +75,7 @@ public class BookController {
 
     //Gestion des relations Book <-> User
 
-    @PatchMapping("/{bookId}/status/{userId}") //permet de mettre si on a lu un livre, le {userId} sera
+    @PatchMapping("/{bookId}/status/{userId}") //permet de mettre si on a lu un livre, le possède, sa note, ..., le {userId} sera
     // remplacé lorsque spring security sera en place par la récupération de l'id de la personne connectée
     public ResponseEntity<BookWithUsersInputDTO> updateStatus(
             @PathVariable Long bookId,

@@ -15,6 +15,7 @@ public record LoanCreateDTO(
         @NotNull
         Long borrowerId,
 
+        @NotNull
         LocalDate loanDate,
 
         LocalDate returnDate

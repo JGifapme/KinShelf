@@ -1,6 +1,7 @@
 package com.kinshelf.services;
 
 import com.kinshelf.dto.book.BookFromApiDTO;
+import com.kinshelf.exceptions.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,11 +22,17 @@ public class DataFromOtherApiService {
     private final RestTemplate restTemplate = new RestTemplate();
     
     public BookFromApiDTO bookByIsbn(String isbn) {
+        //On retire les tirets si il y en a
         isbn = isbn.trim().replace("-","");
+
+        if (isbn.length() != 10 &&  isbn.length() != 13) {
+            throw new BadRequestException("Numéro isbn invalide. Il doit contenir soit 10 soit 13 chiffres.");
+        }
+
         // On teste OpenLibrary en premier car les livres en Fr semble mieux décrits
         BookFromApiDTO openLibraryDto = recupDeOpenLibrary(isbn);
 
-        // On récupère aussi les données de Google Books
+        // On récupère ensuite les données de Google Books
         BookFromApiDTO googleDto = recupDeGoogleBooks(isbn);
 
         // Si les deux sont null on retourne null
@@ -159,7 +166,7 @@ public class DataFromOtherApiService {
             String imageUrl = null;
             if (volumeInfo.containsKey("imageLinks")) {
                 Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-                imageUrl = imageLinks.get("thumbnail");
+                imageUrl = imageLinks.get("small");
             }
 
             //la date

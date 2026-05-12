@@ -3,16 +3,10 @@ USE `kinshelf`;
 
 /*Tables with foreign key : */
 DROP TABLE IF EXISTS `books_genres`;
-CREATE DATABASE IF NOT EXISTS `kinshelf`;
-USE `kinshelf`;
-
-/*Tables with foreign key : */
-DROP TABLE IF EXISTS `books_genres`;
 DROP TABLE IF EXISTS `books_authors`;
 DROP TABLE IF EXISTS `books_users`;
 DROP TABLE IF EXISTS `loans`;
 DROP TABLE IF EXISTS `books`;
-
 
 /*Tables without foreign key : */
 DROP TABLE IF EXISTS `series`;
@@ -27,16 +21,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id_user` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `fname` VARCHAR(75) NOT NULL,
   `lname` VARCHAR(75) NOT NULL,
-  `slug` VARCHAR(150) NOT NULL UNIQUE,
+  `slug` VARCHAR(150) NOT NULL UNIQUE INDEX,
   `dob` DATE NOT NULL,
   `email` VARCHAR(255) UNIQUE,
   `password` VARCHAR(255)
 ) ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS `authors` (
   `id_author` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `fname` VARCHAR(75) NOT NULL,
+  `fname` VARCHAR(75),
   `lname` VARCHAR(75) NOT NULL,
-  `slug` VARCHAR(150) NOT NULL UNIQUE
+  `slug` VARCHAR(150) NOT NULL UNIQUE INDEX,
   UNIQUE(fname, lname)
 ) ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS `genres` (

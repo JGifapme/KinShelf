@@ -6,9 +6,11 @@ import java.time.LocalDate;
 public record UserCreateDTO(
 
         @NotBlank(message = "Le prénom est obligatoire")
+        @Size(max = 75, message = "Le prénom ne peut dépasser 75 caractères.")
         String firstName,
 
         @NotBlank(message = "Le nom de famille est obligatoire")
+        @Size(max = 75, message = "Le nom de famille ne peut dépasser 75 caractères.")
         String lastName,
 
         @NotNull(message = "La date de naissance est obligatoire")
