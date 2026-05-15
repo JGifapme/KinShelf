@@ -4,28 +4,41 @@ import com.kinshelf.dto.user.UserCreateDTO;
 import com.kinshelf.dto.user.UserMapper;
 import com.kinshelf.dto.user.UserResponseDTO;
 import com.kinshelf.entities.User;
+import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.exceptions.BadRequestException;
 import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Transactional
     public UserResponseDTO create(UserCreateDTO dto) {
-        String slug = Slugify.toSlug(dto.firstName()+" "+dto.lastName());
-        // vérifier que le slug est unique
-        while (userRepository.existsBySlug(slug)) {
+        String slug = Slugify.toSlug(dto.username());
+        // vérifier que le slug, le username et l'email est unique
+        if (userRepository.existsBySlug(slug)) {
             throw new BadRequestException("L'url associée existe déjà. Vérifier que vous ne possédez pas déjà un compte.");
+        }
+        if (userRepository.existsByUsername(dto.username())) {
+            throw new BadRequestException("Ce nom d'utilisateur existe déjà. Vérifier que vous ne possédez pas déjà un compte.");
+        }
+        if (userRepository.existsByEmail(dto.email())) {
+            throw new BadRequestException("Cette adresse email est déjà utilisée. Vérifier que vous ne possédez pas déjà un compte.");
         }
         User user = UserMapper.toEntity(dto);
         user.setSlug(slug);
@@ -71,5 +84,23 @@ public class UserService {
         }
 
         userRepository.deleteById(id);
+    }
+
+    /// méthode utilisée par spring security pour récupérer le usernmae de l'utilisateur
+    @Override
+    public UserDetailsImplementation loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Utilisateur introuvable : " + username);
+        }
+        return new UserDetailsImplementation(user);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

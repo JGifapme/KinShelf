@@ -21,11 +21,8 @@ public class User {
     @Column(name = "id_user")
     private Long id;
 
-    @Column(name = "fname", nullable = false, length = 75)
-    private String firstName;
-
-    @Column(name = "lname", nullable = false, length = 75)
-    private String lastName;
+    @Column(name = "username", nullable = false, length = 150)
+    private String username;
 
     @Column(nullable = false, length = 150)
     private String slug;
@@ -50,4 +47,15 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "borrower")
     private List<Loan> borrowedLoans = new ArrayList<>();
+
+    //Pour Spring security : roles
+    @Builder.Default
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private List<String> userRoles = new ArrayList<>(List.of("USER"));
+
+    public void setRoles(List<String> roleUser) {
+        this.userRoles = roleUser;
+    }
 }

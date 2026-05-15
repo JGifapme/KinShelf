@@ -1,11 +1,13 @@
 package com.kinshelf.dto.user;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
-import java.util.List;
 
-public record UserCreateDTO(
-
+public record RegisterRequest(
         @NotBlank(message = "Le username est obligatoire")
         @Size(max = 150, message = "Le username ne peut dépasser 150 caractères.")
         String username,
@@ -19,7 +21,6 @@ public record UserCreateDTO(
 
         @NotBlank(message = "Le mot de passe est obligatoire")
         @Size(min = 6, message = "Le mot de passe doit faire minimum 6 caractères.")
-        String password,
-
-        List<String> userRoles
-) {}
+        String password
+) {
+}

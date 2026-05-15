@@ -35,13 +35,14 @@ public class BookController {
 
     //n'importe quel user identifié
     @GetMapping
-    public ResponseEntity<List<BookResponseDTO>> getAll(
+    public ResponseEntity<List<BookTitleAndImgDTO>> getAll(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String genreSlug,
-            @RequestParam(required = false) String userSlug
+            @RequestParam(required = false) String userSlug,
+            @RequestParam(required = false) String categorySlug
             ) {
         //Ajouter la possibilité de mettre des filtres : lu, possédé, en fonction de la note, de l'auteur, du titre,
-            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug));
+            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug, categorySlug));
     }
 
     //n'importe quel user identifié
@@ -73,11 +74,10 @@ public class BookController {
     }
 
 
-    //Gestion des relations Book <-> User
-
+    ///Gestion des relations Book <-> User
     @PatchMapping("/{bookId}/status/{userId}") //permet de mettre si on a lu un livre, le possède, sa note, ..., le {userId} sera
     // remplacé lorsque spring security sera en place par la récupération de l'id de la personne connectée
-    public ResponseEntity<BookWithUsersInputDTO> updateStatus(
+    public ResponseEntity<BookWithUsersInputDTO> upCreateStatus(
             @PathVariable Long bookId,
             @PathVariable Long userId,
             @Valid @RequestBody BookUserCreateDTO bookUserCreateDTO) {

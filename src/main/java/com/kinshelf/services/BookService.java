@@ -1,9 +1,6 @@
 package com.kinshelf.services;
 
-import com.kinshelf.dto.book.BookCreateDTO;
-import com.kinshelf.dto.book.BookMapper;
-import com.kinshelf.dto.book.BookResponseDTO;
-import com.kinshelf.dto.book.BookWithUsersInputDTO;
+import com.kinshelf.dto.book.*;
 import com.kinshelf.entities.*;
 import com.kinshelf.exceptions.BadRequestException;
 import com.kinshelf.exceptions.NotFoundException;
@@ -15,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +49,7 @@ public class BookService {
                 .map(bookMapper::toDTO)
                 .toList();
     }
-    public List<BookResponseDTO> findAll(String search, String genreSlug, String userSlug) {
+    public List<BookTitleAndImgDTO> findAll(String search, String genreSlug, String userSlug, String categorySlug) {
         // On vérifie que les paramètre ne soit pas vide "" ce qui pourrait provoquer des erreurs, on préfère renvoyer null
         String searchN = search;
         if (search == null || search.trim().isEmpty()) {
@@ -61,13 +59,24 @@ public class BookService {
         if (genreSlug == null || genreSlug.trim().isEmpty()) {
             genreSlugN = null;
         }
+        String allUsers = null;
+        if (Objects.equals(userSlug, "all-users")) {
+            userSlug = null;
+            allUsers = "1";
+
+        }
         String userSlugN = userSlug;
         if (userSlug == null || userSlug.trim().isEmpty()) {
             userSlugN = null;
         }
-        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN)
+
+        String categorySlugN = categorySlug;
+        if (categorySlug == null || categorySlug.trim().isEmpty()) {
+            categorySlugN = null;
+        }
+        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN, categorySlugN, allUsers)
                 .stream()
-                .map(bookMapper::toDTO)
+                .map(bookMapper::toDTOTitleAndImg)
                 .toList();
     }
 

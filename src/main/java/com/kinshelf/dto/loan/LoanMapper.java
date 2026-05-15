@@ -16,10 +16,10 @@ public class LoanMapper {
                 loan.getBook().getTitle(),
 
                 loan.getOwner().getId(),
-                loan.getOwner().getFirstName() + " " + loan.getOwner().getLastName(),
+                loan.getOwner().getUsername(),
 
                 loan.getBorrower().getId(),
-                loan.getBorrower().getFirstName() + " " + loan.getBorrower().getLastName(),
+                loan.getBorrower().getUsername(),
 
                 loan.getLoanDate(),
                 loan.getReturnDate()

@@ -19,8 +19,7 @@ DROP TABLE IF EXISTS `users`;
 /*Tables without foreign key : */
 CREATE TABLE IF NOT EXISTS `users` (
   `id_user` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `fname` VARCHAR(75) NOT NULL,
-  `lname` VARCHAR(75) NOT NULL,
+  `username` VARCHAR(150) NOT NULL UNIQUE,
   `slug` VARCHAR(150) NOT NULL UNIQUE INDEX,
   `dob` DATE NOT NULL,
   `email` VARCHAR(255) UNIQUE,

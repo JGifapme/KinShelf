@@ -11,8 +11,7 @@ public class UserMapper {
 
         return new UserResponseDTO(
                 user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
+                user.getUsername(),
                 user.getSlug(),
                 user.getDateOfBirth()
         );
@@ -24,11 +23,11 @@ public class UserMapper {
         }
 
         return User.builder()
-                .firstName(dto.firstName())
-                .lastName(dto.lastName())
+                .username(dto.username())
                 .dateOfBirth(dto.dateOfBirth())
                 .email(dto.email())
                 .password(dto.password()) // à modifier avec spring sécurity quand vu au cours
+                .userRoles(dto.userRoles())
                 .build();
     }
 
@@ -37,11 +36,8 @@ public class UserMapper {
             return;
         }
 
-        if (dto.firstName() != null) {
-            user.setFirstName(dto.firstName());
-        }
-        if (dto.lastName() != null) {
-            user.setLastName(dto.lastName());
+        if (dto.username() != null) {
+            user.setUsername(dto.username());
         }
         if (dto.dateOfBirth() != null) {
             user.setDateOfBirth(dto.dateOfBirth());

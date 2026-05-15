@@ -57,6 +57,18 @@ public class BookMapper {
         );
     }
 
+    public BookTitleAndImgDTO toDTOTitleAndImg(Book book) {
+        if (book == null) {
+            return null;
+        }
+        return new BookTitleAndImgDTO(
+                book.getId(),
+                book.getTitle(),
+                book.getSlug(),
+                book.getCoverUrl()
+        );
+    }
+
 
     public BookWithUsersInputDTO toDTOWithUsersInput(Book book) {
         if (book == null) {
@@ -149,7 +161,7 @@ public class BookMapper {
                 .map(bu -> new BUWithUserNameDTO(
                         bu.getBook().getSlug(),
                         bu.getUser().getSlug(),
-                        bu.getUser().getFirstName()+" "+bu.getUser().getLastName(),
+                        bu.getUser().getUsername(),
                         bu.getIsOwn(),
                         bu.getIsRead(),
                         bu.getIsInterested(),

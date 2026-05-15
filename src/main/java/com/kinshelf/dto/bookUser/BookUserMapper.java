@@ -35,7 +35,7 @@ public class BookUserMapper {
         return new BUWithUserNameDTO(
                 bu.getBook().getSlug(),
                 bu.getUser().getSlug(),
-                bu.getUser().getFirstName()+" "+bu.getUser().getLastName(),
+                bu.getUser().getUsername(),
                 bu.getIsOwn(),
                 bu.getIsRead(),
                 bu.getIsInterested(),

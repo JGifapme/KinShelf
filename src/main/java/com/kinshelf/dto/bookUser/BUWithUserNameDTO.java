@@ -5,7 +5,7 @@ import com.kinshelf.entities.BookUserId;
 public record BUWithUserNameDTO(
         String bookSlug,
         String userSlug,
-        String userName,
+        String username,
         Boolean isOwn,
         Boolean isRead,
         Boolean isInterested,

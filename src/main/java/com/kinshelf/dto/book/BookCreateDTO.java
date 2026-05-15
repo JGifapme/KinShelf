@@ -28,7 +28,7 @@ public record BookCreateDTO(
 
         Long publisherId,
 
-        @NotBlank(message = "La catégorie est obligatoire")
+        @NotNull(message = "La catégorie est obligatoire")
         Long categoryId,
         Long seriesId,
 
