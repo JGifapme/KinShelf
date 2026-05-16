@@ -1,6 +1,13 @@
 package com.kinshelf.dto.user;
 
+import com.kinshelf.dto.book.BookTitleAndImgDTO;
+import com.kinshelf.dto.publisher.PublisherWithBooksDTO;
+import com.kinshelf.entities.Book;
+import com.kinshelf.entities.Publisher;
 import com.kinshelf.entities.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserMapper {
 

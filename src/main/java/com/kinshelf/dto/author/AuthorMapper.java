@@ -20,9 +20,7 @@ public class AuthorMapper {
 
         return new AuthorResponseDTO(
                 author.getId(),
-                author.getFirstName(),
-                author.getLastName(),
-                author.getFirstName() + " " + author.getLastName(),
+                author.getName(),
                 author.getSlug()
         );
     }
@@ -32,8 +30,7 @@ public class AuthorMapper {
             return null;
         }
         Author author = new Author();
-        author.setFirstName(dto.firstName());
-        author.setLastName(dto.lastName());
+        author.setName(dto.name());
         return author;
     }
 
@@ -41,11 +38,8 @@ public class AuthorMapper {
         if (author == null || dto == null) {
             return;
         }
-        if (dto.firstName() != null) {
-            author.setFirstName(dto.firstName());
-        }
-        if (dto.lastName() != null) {
-            author.setLastName(dto.lastName());
+        if (dto.name() != null) {
+            author.setName(dto.name());
         }
     }
 
@@ -56,9 +50,7 @@ public class AuthorMapper {
 
         return new AuthorWithBooksDTO(
                 author.getId(),
-                author.getFirstName(),
-                author.getLastName(),
-                author.getFirstName() + " " + author.getLastName(),
+                author.getName(),
                 mapBooks(author)
         );
     }

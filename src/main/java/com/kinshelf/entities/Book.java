@@ -25,10 +25,10 @@ public class Book {
     @Column(nullable = false, length = 255)
     private String title;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255, unique = true)
     private String slug;
 
-    @Column(length = 25)
+    @Column(length = 25, unique = true)
     private String isbn;
 
     private String description;

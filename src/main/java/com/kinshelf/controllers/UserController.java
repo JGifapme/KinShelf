@@ -2,10 +2,13 @@ package com.kinshelf.controllers;
 
 import com.kinshelf.dto.user.UserCreateDTO;
 import com.kinshelf.dto.user.UserResponseDTO;
+import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,6 +51,12 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserResponseDTO> getMe(@AuthenticationPrincipal UserDetailsImplementation userDetails) {
+        return ResponseEntity.ok(userService.findByUsername(userDetails.getUsername()));
     }
 
     //GET /{userId}/collection : voir tout les livres possédé par tel membre

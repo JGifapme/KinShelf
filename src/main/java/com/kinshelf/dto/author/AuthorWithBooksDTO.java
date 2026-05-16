@@ -6,9 +6,7 @@ import java.util.List;
 
 public record AuthorWithBooksDTO(
         Long id,
-        String firstName,
-        String lastName,
-        String fullName,
+        String name,
         List<BookTitleAndImgDTO> books
 ) {
 }

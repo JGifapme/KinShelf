@@ -23,7 +23,7 @@ public class Series {
     @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 150, unique = true)
     private String slug;
 
     @Enumerated(EnumType.STRING)

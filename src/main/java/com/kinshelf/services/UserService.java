@@ -97,6 +97,11 @@ public class UserService implements UserDetailsService {
         return new UserDetailsImplementation(user);
     }
 
+    public UserResponseDTO findByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        return UserMapper.toDTO(user);
+    }
+
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }

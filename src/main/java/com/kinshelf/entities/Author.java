@@ -20,13 +20,10 @@ public class Author {
     @Column(name = "id_author")
     private Long id;
 
-    @Column(name = "fname", nullable = false, length = 75)
-    private String firstName;
-
-    @Column(name = "lname", nullable = false, length = 75)
-    private String lastName;
-
     @Column(nullable = false, length = 150)
+    private String name;
+
+    @Column(nullable = false, length = 150, unique = true)
     private String slug;
 
     @JsonIgnore

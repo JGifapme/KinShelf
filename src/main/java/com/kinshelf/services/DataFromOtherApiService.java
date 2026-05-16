@@ -29,7 +29,7 @@ public class DataFromOtherApiService {
             throw new BadRequestException("Numéro isbn invalide. Il doit contenir soit 10 soit 13 chiffres.");
         }
 
-        // On teste OpenLibrary en premier car les livres en Fr semble mieux décrits
+        // On récupère les données OpenLibrary
         BookFromApiDTO openLibraryDto = recupDeOpenLibrary(isbn);
 
         // On récupère ensuite les données de Google Books
@@ -48,6 +48,7 @@ public class DataFromOtherApiService {
             return openLibraryDto;
         }
         // Si on a les deux, on merge les données des deux
+        // on garde les données de OpenLibrary si on a les deux car les livres en Fr semblent mieux décrits
         else {
             String title;
             if (openLibraryDto.title() != null && !openLibraryDto.title().isEmpty()) {

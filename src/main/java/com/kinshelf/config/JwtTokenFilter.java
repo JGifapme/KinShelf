@@ -2,6 +2,8 @@ package com.kinshelf.config;
 
 import com.kinshelf.services.JwtService;
 import com.kinshelf.services.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,11 +45,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println(authHeader);
+        //System.out.println(authHeader);
         // 3. Extraire le token (sans le "Bearer ")
         final String token = authHeader.split(" ")[1].trim();
 
         // 4. Extraire le nom d'utilisateur depuis le token
+        try {
         String username = jwtService.extractUsername(token);
 
         // 6. Charger les détails de l'utilisateur depuis la base de données
@@ -66,5 +69,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
         // Étape 10 : Continuer la chaîne de filtres
         filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            // Token expiré → 401 avec message clair
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Token expiré, veuillez vous reconnecter.\"}");
+        } catch (JwtException e) {
+            // Token invalide (malformé, mauvaise signature...)
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Token invalide.\"}");
+        }
     }
 }

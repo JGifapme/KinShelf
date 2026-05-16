@@ -131,9 +131,7 @@ public class BookMapper {
 
                     return new AuthorResponseWithRoleDTO(
                             author.getId(),
-                            author.getFirstName(),
-                            author.getLastName(),
-                            author.getFirstName() + " " + author.getLastName(),
+                            author.getName(),
                             author.getSlug(),
                             roleName
                     );

@@ -12,6 +12,9 @@ import com.kinshelf.services.BookService;
 import com.kinshelf.services.BookUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,14 +38,17 @@ public class BookController {
 
     //n'importe quel user identifié
     @GetMapping
-    public ResponseEntity<List<BookTitleAndImgDTO>> getAll(
+    public ResponseEntity<Page<BookTitleAndImgDTO>> getAll(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String genreSlug,
             @RequestParam(required = false) String userSlug,
-            @RequestParam(required = false) String categorySlug
+            @RequestParam(required = false) String categorySlug,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size
             ) {
+        Pageable pageable = PageRequest.of(page, size);
         //Ajouter la possibilité de mettre des filtres : lu, possédé, en fonction de la note, de l'auteur, du titre,
-            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug, categorySlug));
+            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug, categorySlug, pageable));
     }
 
     //n'importe quel user identifié

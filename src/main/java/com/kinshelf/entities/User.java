@@ -21,10 +21,10 @@ public class User {
     @Column(name = "id_user")
     private Long id;
 
-    @Column(name = "username", nullable = false, length = 150)
+    @Column(name = "username", nullable = false, length = 150, unique = true)
     private String username;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 150, unique = true)
     private String slug;
 
     @Column(name = "dob", nullable = false)

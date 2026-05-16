@@ -1,7 +1,8 @@
 package com.kinshelf.repositories;
 
-import com.kinshelf.entities.Author;
 import com.kinshelf.entities.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +16,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findBySlug(String slug);
     boolean existsBySlug(String slug);
     boolean existsByIsbn(String isbn);
-    List<Book> findAllByOrderByTitleAsc();
+    Page<Book> findAllByOrderByTitleAsc(Pageable pageable);
     @Query("""
     SELECT DISTINCT b FROM Book b 
     LEFT JOIN b.bookAuthors ba 
@@ -28,19 +29,18 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     WHERE (:search IS NULL 
         OR LOWER(b.title) LIKE LOWER(CONCAT('%', :search, '%')) 
         OR LOWER(s.name) LIKE LOWER(CONCAT('%', :search, '%'))
-        OR LOWER(CONCAT(a.firstName, ' ', a.lastName)) LIKE LOWER(CONCAT('%', :search, '%')))
+        OR LOWER(a.name) LIKE LOWER(CONCAT('%', :search, '%')))
         AND (:genreSlug IS NULL OR g.slug = :genreSlug)
         AND (:categorySlug IS NULL OR c.slug = :categorySlug)
         AND (:userSlug IS NULL OR (bu.isOwn = true AND u.slug = :userSlug))
         AND (:allUsers IS NULL OR bu.isOwn = true)
     ORDER BY b.title ASC
 """)
-    List<Book> findBookSearch(
+    Page<Book> findBookSearch(
             @Param("search") String search,
             @Param("genreSlug") String genreSlug,
             @Param("userSlug") String userSlug,
             @Param("categorySlug") String categorySlug,
-            @Param("allUsers") String allUsers
-
-    );
+            @Param("allUsers") String allUsers,
+            Pageable pageable);
 }

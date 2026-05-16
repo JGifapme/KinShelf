@@ -9,6 +9,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,13 +45,10 @@ public class BookService {
         return bookMapper.toDTO(bookRepository.save(book));
     }
 
-    public List<BookResponseDTO> findAll() {
-        return bookRepository.findAllByOrderByTitleAsc()
-                .stream()
-                .map(bookMapper::toDTO)
-                .toList();
+    public Page<BookTitleAndImgDTO> findAll(Pageable pageable) {
+        return bookRepository.findAllByOrderByTitleAsc(pageable).map(bookMapper::toDTOTitleAndImg);
     }
-    public List<BookTitleAndImgDTO> findAll(String search, String genreSlug, String userSlug, String categorySlug) {
+    public Page<BookTitleAndImgDTO> findAll(String search, String genreSlug, String userSlug, String categorySlug, Pageable pageable) {
         // On vérifie que les paramètre ne soit pas vide "" ce qui pourrait provoquer des erreurs, on préfère renvoyer null
         String searchN = search;
         if (search == null || search.trim().isEmpty()) {
@@ -74,10 +73,8 @@ public class BookService {
         if (categorySlug == null || categorySlug.trim().isEmpty()) {
             categorySlugN = null;
         }
-        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN, categorySlugN, allUsers)
-                .stream()
-                .map(bookMapper::toDTOTitleAndImg)
-                .toList();
+        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN, categorySlugN, allUsers, pageable)
+                .map(bookMapper::toDTOTitleAndImg);
     }
 
     public BookWithUsersInputDTO findById(Long id) {

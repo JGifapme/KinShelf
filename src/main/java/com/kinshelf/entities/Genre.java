@@ -20,10 +20,10 @@ public class Genre {
     @Column(name = "id_genre")
     private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 150, unique = true)
     private String name;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, length = 150, unique = true)
     private String slug;
 
     @JsonIgnore
