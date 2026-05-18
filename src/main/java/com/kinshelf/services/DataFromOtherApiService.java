@@ -2,6 +2,7 @@ package com.kinshelf.services;
 
 import com.kinshelf.dto.book.BookFromApiDTO;
 import com.kinshelf.exceptions.BadRequestException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +17,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@RequiredArgsConstructor
 public class DataFromOtherApiService {
+    private final BookService bookService;
     
     //RestTemplate sert à transformer la réponse JSON de l'API en une Map
     private final RestTemplate restTemplate = new RestTemplate();
@@ -27,6 +30,9 @@ public class DataFromOtherApiService {
 
         if (isbn.length() != 10 &&  isbn.length() != 13) {
             throw new BadRequestException("Numéro isbn invalide. Il doit contenir soit 10 soit 13 chiffres.");
+        }
+        if (bookService.isIsbnInDb(isbn)) {
+            throw new BadRequestException("Ce numéro isbn est déjà présent dans la bibliothèque.");
         }
 
         // On récupère les données OpenLibrary

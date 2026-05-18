@@ -51,10 +51,10 @@ public class AuthService {
                     );
         }
         catch (BadCredentialsException e){
-            throw  new UnauthorizedException("Vous n'êtes pas autorisé à accéder au contenue");
+            throw  new UnauthorizedException("Vous n'êtes pas autorisé à accéder a ce contenu.");
         }
         catch (DisabledException e){
-            throw  new ForbiddenException("Compte désactivé");
+            throw  new ForbiddenException("Compte désactivé.");
         }
     }
 
@@ -62,10 +62,10 @@ public class AuthService {
         try {
             // on vérifie si le nom et l'email ne sont pas déjà pris
             if (userService.existsByUsername(request.username())) {
-                throw new BadRequestException("Nom d'utilisateur déjà pris");
+                throw new BadRequestException("Nom d'utilisateur déjà pris.");
             }
             if (userService.existsByEmail(request.email())) {
-                throw new BadRequestException("Email déjà enregistré");
+                throw new BadRequestException("Email déjà enregistré.");
             }
 
             // on crée l'utilisateur

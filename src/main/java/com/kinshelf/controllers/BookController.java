@@ -8,6 +8,7 @@ import com.kinshelf.dto.book.BookWithUsersInputDTO;
 import com.kinshelf.dto.bookUser.BookUserCreateDTO;
 import com.kinshelf.dto.bookUser.BookUserResponseDTO;
 import com.kinshelf.entities.BookUserId;
+import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.services.BookService;
 import com.kinshelf.services.BookUserService;
 import jakarta.validation.Valid;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "http://localhost:5173")
+@PreAuthorize("isAuthenticated()")// seul les utilisateurs authentifié/connecté peuvent utiliser cet endpoints
 public class BookController {
 
     private final BookService bookService;
@@ -43,12 +46,13 @@ public class BookController {
             @RequestParam(required = false) String genreSlug,
             @RequestParam(required = false) String userSlug,
             @RequestParam(required = false) String categorySlug,
+            @RequestParam(required = false) String publisherSlug,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size
             ) {
         Pageable pageable = PageRequest.of(page, size);
         //Ajouter la possibilité de mettre des filtres : lu, possédé, en fonction de la note, de l'auteur, du titre,
-            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug, categorySlug, pageable));
+            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug, categorySlug, publisherSlug, pageable));
     }
 
     //n'importe quel user identifié
@@ -71,8 +75,8 @@ public class BookController {
         return ResponseEntity.ok(bookService.update(id, dto));
     }
 
-    //juste les admins
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // seulement les admins sont autorisé à utiliser cet endpoint
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         bookService.delete(id);
         return ResponseEntity.noContent().build();
@@ -80,18 +84,18 @@ public class BookController {
     }
 
 
-    ///Gestion des relations Book <-> User
-    @PatchMapping("/{bookId}/status/{userId}") //permet de mettre si on a lu un livre, le possède, sa note, ..., le {userId} sera
-    // remplacé lorsque spring security sera en place par la récupération de l'id de la personne connectée
+    /// Gestion des relations Book <-> User.
+    /// Update ou créer l'entrée : 1 seul endpoint pour les 2
+    @PatchMapping("/{bookId}/status") //permet de mettre si on a lu un livre, le possède, sa note, ...,
     public ResponseEntity<BookWithUsersInputDTO> upCreateStatus(
             @PathVariable Long bookId,
-            @PathVariable Long userId,
+            // seulement le permettre pour l'utilisateur identifié, récupérer son id via spring security :
+            @AuthenticationPrincipal UserDetailsImplementation userDetails,
             @Valid @RequestBody BookUserCreateDTO bookUserCreateDTO) {
-        bookUserService.upCreate(new BookUserId(bookId, userId), bookUserCreateDTO);
-        //Update ou créer l'entrée : 1 seul endpoint pour les 2
+        bookUserService.upCreate(new BookUserId(bookId, userDetails.getUserEntity().getId()), bookUserCreateDTO);
+
         return ResponseEntity.ok(bookService.findById(bookId));
     }
-    // si on le possède, la note, le commentaire,
-    // seulement le permettre pour l'utilisateur identifié, récupérer son id via spring security
+
 
 }

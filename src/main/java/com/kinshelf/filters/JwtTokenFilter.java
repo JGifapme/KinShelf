@@ -1,4 +1,4 @@
-package com.kinshelf.config;
+package com.kinshelf.filters;
 
 import com.kinshelf.services.JwtService;
 import com.kinshelf.services.UserService;
@@ -69,16 +69,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
         // Étape 10 : Continuer la chaîne de filtres
         filterChain.doFilter(request, response);
+
+        // Étape 11 : retourner des erreurs si nécessaire
+        // récupération des exceptions : retour 401 : Unauthorized
+        // comme on est dans les filtres, c'est trop tôt, on ne peut pas utiliser le GlobalExceptionHandler
+        // donc on les envoie d'ici
         } catch (ExpiredJwtException e) {
-            // Token expiré → 401 avec message clair
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Token expiré, veuillez vous reconnecter.\"}");
+            response.getWriter().write("{\"Authentification expirée, veuillez vous reconnecter.\"}");
         } catch (JwtException e) {
-            // Token invalide (malformé, mauvaise signature...)
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Token invalide.\"}");
+            response.getWriter().write("{\"Token invalide.\"}");
         }
     }
 }

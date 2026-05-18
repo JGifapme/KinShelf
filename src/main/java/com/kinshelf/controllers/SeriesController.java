@@ -7,6 +7,7 @@ import com.kinshelf.services.SeriesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,34 +15,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/series")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")// seul les utilisateurs authentifié/connecté peuvent utiliser cet endpoints
 public class SeriesController {
 
     private final SeriesService seriesService;
 
-    //n'importe quel user identifié
     @PostMapping
     public ResponseEntity<SeriesResponseDTO> create(@Valid @RequestBody SeriesCreateDTO dto) {
         return ResponseEntity.ok(seriesService.create(dto));
     }
 
-    //n'importe quel user identifié
     @GetMapping
     public ResponseEntity<List<SeriesResponseDTO>> getAll() {
         return ResponseEntity.ok(seriesService.findAll());
     }
 
-    //n'importe quel user identifié
     @GetMapping("/id/{id}")
     public ResponseEntity<SeriesWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(seriesService.findById(id));
     }
+
     @GetMapping("/{slug}")
     public ResponseEntity<SeriesWithBooksDTO> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(seriesService.findBySlug(slug));
     }
 
-    //admin suelement
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // seulement les admins sont autorisé à utiliser cet endpoint
     public ResponseEntity<SeriesResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody SeriesCreateDTO dto
@@ -49,8 +49,8 @@ public class SeriesController {
         return ResponseEntity.ok(seriesService.update(id, dto));
     }
 
-    //admin seulement
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // seulement les admins sont autorisé à utiliser cet endpoint
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         seriesService.delete(id);
         return ResponseEntity.noContent().build();

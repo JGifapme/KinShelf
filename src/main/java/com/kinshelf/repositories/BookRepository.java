@@ -24,6 +24,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     LEFT JOIN b.series s
     LEFT JOIN b.genres g
     LEFT JOIN b.category c
+    LEFT JOIN b.publisher p
     LEFT JOIN b.bookUsers bu 
     LEFT JOIN bu.user u 
     WHERE (:search IS NULL 
@@ -32,6 +33,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
         OR LOWER(a.name) LIKE LOWER(CONCAT('%', :search, '%')))
         AND (:genreSlug IS NULL OR g.slug = :genreSlug)
         AND (:categorySlug IS NULL OR c.slug = :categorySlug)
+        AND (:publisherSlug IS NULL OR p.slug = :publisherSlug)
         AND (:userSlug IS NULL OR (bu.isOwn = true AND u.slug = :userSlug))
         AND (:allUsers IS NULL OR bu.isOwn = true)
     ORDER BY b.title ASC
@@ -42,5 +44,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             @Param("userSlug") String userSlug,
             @Param("categorySlug") String categorySlug,
             @Param("allUsers") String allUsers,
+            @Param("publisherSlug") String publisherSlug,
             Pageable pageable);
 }

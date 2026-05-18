@@ -7,6 +7,7 @@ import com.kinshelf.services.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,23 +15,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/authors")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")// seul les utilisateurs authentifié/connecté peuvent utiliser cet endpoints
 public class AuthorController {
 
     private final AuthorService authorService;
 
-    //n'importe quel user identifié
     @PostMapping
     public ResponseEntity<AuthorResponseDTO> create(@Valid @RequestBody AuthorCreateDTO dto) {
         return ResponseEntity.ok(authorService.create(dto));
     }
 
-    //n'importe quel user identifié
     @GetMapping
     public ResponseEntity<List<AuthorResponseDTO>> getAll() {
         return ResponseEntity.ok(authorService.findAll());
     }
 
-    //n'importe quel user identifié
     @GetMapping("/id/{id}")
     public ResponseEntity<AuthorWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(authorService.findById(id));
@@ -41,8 +40,8 @@ public class AuthorController {
         return ResponseEntity.ok(authorService.findBySlug(slug));
     }
 
-    //juste admin
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // seulement les admins sont autorisé à utiliser cet endpoint
     public ResponseEntity<AuthorResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody AuthorCreateDTO dto
@@ -50,8 +49,8 @@ public class AuthorController {
         return ResponseEntity.ok(authorService.update(id, dto));
     }
 
-    //juste admin
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // seulement les admins sont autorisé à utiliser cet endpoint
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         authorService.delete(id);
         return ResponseEntity.noContent().build();

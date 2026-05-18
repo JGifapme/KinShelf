@@ -19,8 +19,8 @@ import java.util.List;
 @Data
 public class JwtService {
 
-    ///30 minutes de durée avant d'expiration pour le token
-    private final long jwtExpiration= 30*60*1000;
+    ///60 minutes de durée avant d'expiration pour le token
+    private final long jwtExpiration= 60*60*1000;
     @Value("${jwt.secret-key}")
     private String secretKey;
     public String generateToken( String UserName, List<String> roles){

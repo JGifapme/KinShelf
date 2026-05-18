@@ -5,6 +5,7 @@ import com.kinshelf.exceptions.NotFoundException;
 import com.kinshelf.services.DataFromOtherApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/isbn")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")// seul les utilisateurs authentifié/connecté peuvent utiliser cet endpoints
 public class IsbnController {
 
     private final DataFromOtherApiService dataApiService;

@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()") // seul les utilisateurs authentifié/connecté peuvent utiliser cet endpoints
 public class UserController {
 
     private final UserService userService;
@@ -34,12 +35,14 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
+
     @GetMapping("/{slug}")
     public ResponseEntity<UserResponseDTO> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(userService.findBySlug(slug));
     }
     
     @PatchMapping("/{id}")
+    //vérifier que l'id de l'utilisateur connecté = l'id qu'il veut modifier
     public ResponseEntity<UserResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody UserCreateDTO dto
@@ -48,13 +51,13 @@ public class UserController {
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // seulement les admins sont autorisé à utiliser cet endpoint
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/me")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponseDTO> getMe(@AuthenticationPrincipal UserDetailsImplementation userDetails) {
         return ResponseEntity.ok(userService.findByUsername(userDetails.getUsername()));
     }

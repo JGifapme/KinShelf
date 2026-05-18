@@ -7,6 +7,7 @@ import com.kinshelf.services.PublisherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,34 +15,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/publishers")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")// seul les utilisateurs authentifié/connecté peuvent utiliser cet endpoints
 public class PublisherController {
 
     private final PublisherService publisherService;
 
-    //n'importe quel user identifié
     @PostMapping
     public ResponseEntity<PublisherResponseDTO> create(@Valid @RequestBody PublisherCreateDTO dto) {
         return ResponseEntity.ok(publisherService.create(dto));
     }
 
-    //n'importe quel user identifié
     @GetMapping
     public ResponseEntity<List<PublisherResponseDTO>> getAll() {
         return ResponseEntity.ok(publisherService.findAll());
     }
 
-    //n'importe quel user identifié
     @GetMapping("/id/{id}")
     public ResponseEntity<PublisherWithBooksDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(publisherService.findById(id));
     }
+
     @GetMapping("/{slug}")
     public ResponseEntity<PublisherWithBooksDTO> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(publisherService.findBySlug(slug));
     }
 
-    //admin seulement
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // seulement les admins sont autorisé à utiliser cet endpoint
     public ResponseEntity<PublisherResponseDTO> update(
             @PathVariable Long id,
             @Valid @RequestBody PublisherCreateDTO dto
@@ -49,11 +49,10 @@ public class PublisherController {
         return ResponseEntity.ok(publisherService.update(id, dto));
     }
 
-    //admin seulement
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // seulement les admins sont autorisé à utiliser cet endpoint
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         publisherService.delete(id);
         return ResponseEntity.noContent().build();
-        //supprimer les livres affiliés
     }
 }

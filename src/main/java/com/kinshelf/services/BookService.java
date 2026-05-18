@@ -48,7 +48,7 @@ public class BookService {
     public Page<BookTitleAndImgDTO> findAll(Pageable pageable) {
         return bookRepository.findAllByOrderByTitleAsc(pageable).map(bookMapper::toDTOTitleAndImg);
     }
-    public Page<BookTitleAndImgDTO> findAll(String search, String genreSlug, String userSlug, String categorySlug, Pageable pageable) {
+    public Page<BookTitleAndImgDTO> findAll(String search, String genreSlug, String userSlug, String categorySlug, String publisherSlug, Pageable pageable) {
         // On vérifie que les paramètre ne soit pas vide "" ce qui pourrait provoquer des erreurs, on préfère renvoyer null
         String searchN = search;
         if (search == null || search.trim().isEmpty()) {
@@ -73,7 +73,11 @@ public class BookService {
         if (categorySlug == null || categorySlug.trim().isEmpty()) {
             categorySlugN = null;
         }
-        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN, categorySlugN, allUsers, pageable)
+        String publisherSlugN = publisherSlug;
+        if (publisherSlug == null || publisherSlug.trim().isEmpty()) {
+            publisherSlugN = null;
+        }
+        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN, categorySlugN, allUsers, publisherSlugN, pageable)
                 .map(bookMapper::toDTOTitleAndImg);
     }
 
@@ -88,6 +92,9 @@ public class BookService {
                 .orElseThrow(() -> new NotFoundException("Livre introuvable pour cette url."));
 
         return bookMapper.toDTOWithUsersInput(book);
+    }
+    public boolean isIsbnInDb(String isbn) {
+        return bookRepository.existsByIsbn(isbn);
     }
 
     @Transactional

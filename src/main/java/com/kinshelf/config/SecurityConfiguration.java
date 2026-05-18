@@ -1,12 +1,10 @@
 package com.kinshelf.config;
 
+import com.kinshelf.filters.JwtTokenFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -32,15 +30,14 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean // Pas nécessaire ? Demander à M.Ayad Mardi
+//    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+//        provider.setPasswordEncoder(passwordEncoder);
+//        return provider;
+//    }
     @Bean
-    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
-        return provider;
-    }
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
-            throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
