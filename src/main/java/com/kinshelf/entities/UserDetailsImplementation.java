@@ -6,7 +6,6 @@ import lombok.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 
 /// Class pour Spring Security qui fait le pont avec ma User entity
@@ -21,8 +20,7 @@ public class UserDetailsImplementation implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return userEntity.getUserRoles()
                 .stream()
-                .filter(role -> role.startsWith("ROLE_")) // ne récupère que les roles qui commencent par ROLE_
-                .map(SimpleGrantedAuthority::new)
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .toList();
     }
 

@@ -36,7 +36,7 @@ public class GenreController {
     }
 
     @GetMapping("/{slug}")
-    public ResponseEntity<GenreWithBooksDTO> getBySlug(@PathVariable String slug) {
+    public ResponseEntity<GenreResponseDTO> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(genreService.findBySlug(slug));
     }
 

@@ -29,14 +29,18 @@ public class BookService {
 
     @Transactional
     public BookResponseDTO create(BookCreateDTO dto) {
-        String slug = Slugify.toSlug(dto.title());
-        // vérifier que le slug et l'isbn sont uniques
-        while (bookRepository.existsBySlug(slug)) {
-            throw new BadRequestException("L'url associée existe déjà. Vérifiez qu'un livre avec un nom similaire n'existe pas déjà.");
-        }
+        // vérifier que l'isbn est unique
         String isbn = dto.isbn();
         while (bookRepository.existsByIsbn(isbn)){
             throw new BadRequestException("Cet isbn existe déjà, veuillez vérifier que le livre n'existe pas déjà sur KinShelf.");
+        }
+        // Créer un slug unique :
+        String slug = Slugify.toSlug(dto.title());
+        Integer number = 1;
+        slug = createSlug(slug,number);
+        //théoriquement on a créé un slug unique, mais au cas ou, pour renvoyer une erreur propre :
+        while (bookRepository.existsBySlug(slug)) {
+            throw new BadRequestException("L'url associée existe déjà. Vérifiez qu'un livre avec un nom similaire n'existe pas déjà.");
         }
         Book book = new Book();
         book.setSlug(slug);
@@ -116,5 +120,17 @@ public class BookService {
         return bookMapper.toDTO(bookRepository.save(book));
     }
 
-
+    private String createSlug(String slug, Integer number){
+        String newSlug;
+        if (number == 1){
+            newSlug = slug;
+        }
+        else{
+            newSlug = slug+"-"+number;
+        }
+        if (bookRepository.existsBySlug(newSlug)){
+            return createSlug(slug,(number+1));
+        }
+        return newSlug;
+    }
 }

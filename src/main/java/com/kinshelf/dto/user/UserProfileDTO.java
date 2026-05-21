@@ -5,13 +5,12 @@ import com.kinshelf.dto.book.BookTitleAndImgDTO;
 import java.time.LocalDate;
 import java.util.List;
 
-public record UserWithBooksDTO(
+public record UserProfileDTO(
         Long id,
         String username,
         String slug,
         LocalDate dateOfBirth,
         Integer age,
-        Integer nbrOfBooks,
-        List<BookTitleAndImgDTO> books
+        Integer nbrOfBooks
 ) {
 }

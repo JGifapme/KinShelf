@@ -74,7 +74,7 @@ public class AuthService {
                     request.dateOfBirth(),
                     request.email(),
                     passwordEncoder.encode(request.password()),
-                    List.of("ROLE_USER")
+                    List.of("USER")
             );
             userService.create(user);
 

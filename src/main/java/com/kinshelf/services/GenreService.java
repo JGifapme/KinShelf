@@ -46,11 +46,11 @@ public class GenreService {
 
         return GenreMapper.toDTOGenreWithBooks(genre);
     }
-    public @Nullable GenreWithBooksDTO findBySlug(String slug) {
+    public @Nullable GenreResponseDTO findBySlug(String slug) {
         Genre genre = genreRepository.findBySlug(slug)
                 .orElseThrow(() -> new NotFoundException("Genre introuvable pour cette url."));
 
-        return GenreMapper.toDTOGenreWithBooks(genre);
+        return GenreMapper.toDTO(genre);
     }
 
     @Transactional
