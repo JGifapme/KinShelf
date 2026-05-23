@@ -1,10 +1,10 @@
 package com.kinshelf.dto.user;
 
-import java.time.Instant;
 import java.util.List;
 
-public record AuthResponse(
+public record AuthResult(
         String message,
-        List<String> roles
+        List<String> roles,
+        String jwtToken
 ) {
 }
