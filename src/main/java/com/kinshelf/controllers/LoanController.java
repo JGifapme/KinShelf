@@ -2,13 +2,17 @@ package com.kinshelf.controllers;
 
 import com.kinshelf.dto.loan.LoanCreateDTO;
 import com.kinshelf.dto.loan.LoanResponseDTO;
+import com.kinshelf.dto.loan.LoanStatusDTO;
+import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.services.LoanService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -22,27 +26,36 @@ public class LoanController {
     //Controller pour Pret ou dans BookController ? Voir tout les prets de tout le groupe est utile ...
     // mais les autres méthodes plutot dans les tables dédiée soit BookController soit UserController
 
-    @PostMapping
-    public ResponseEntity<LoanResponseDTO> create(@Valid @RequestBody LoanCreateDTO dto) {
-        return ResponseEntity.ok(loanService.create(dto));
+    /// Gestion des prêts (loans).
+    @PostMapping("/{bookId}/to/{borrowerId}")
+    public ResponseEntity<LoanResponseDTO> createLoan(
+            @PathVariable Long bookId,
+            @PathVariable Long borrowerId,
+            // seulement le permettre pour l'utilisateur identifié, récupérer son id via spring security :
+            @AuthenticationPrincipal UserDetailsImplementation userDetails) {
+
+        return ResponseEntity.ok(loanService.create(userDetails.getUserEntity().getId(), borrowerId, bookId));
     }
     
     @GetMapping
     public ResponseEntity<List<LoanResponseDTO>> getAll() {
         return ResponseEntity.ok(loanService.findAll());
     }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<LoanResponseDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(loanService.findById(id));
+
+    @GetMapping("/{bookId}/status")
+    public ResponseEntity<LoanStatusDTO> getLoanStatusForBook(
+            @PathVariable Long bookId,
+            @AuthenticationPrincipal UserDetailsImplementation userDetails) {
+
+        return ResponseEntity.ok(loanService.getLoanStatusForBook(bookId, userDetails.getUserEntity().getId()));
     }
     
     @PatchMapping("/{id}")
     public ResponseEntity<LoanResponseDTO> update(
             @PathVariable Long id,
-            @Valid @RequestBody LoanCreateDTO dto
+            @AuthenticationPrincipal UserDetailsImplementation userDetails
     ) {
-        return ResponseEntity.ok(loanService.update(id, dto));
+        return ResponseEntity.ok(loanService.update(id, userDetails));
     }
     
     @DeleteMapping("/{id}")

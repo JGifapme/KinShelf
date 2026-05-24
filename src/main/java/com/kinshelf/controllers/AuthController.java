@@ -33,7 +33,7 @@ public class AuthController {
                 .secure(false) // mettre true en production, le site doit être en https pour que ça fonctionne
                 .sameSite("Strict")
                 .path("/")
-                .maxAge(Duration.ofHours(8))
+                .maxAge(Duration.ofHours(1)) // même temps que l'expiration du JWT token dans jwtService
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
@@ -55,7 +55,7 @@ public class AuthController {
                 .secure(false) // mettre true en production, le site doit être en https pour que ça fonctionne
                 .sameSite("Strict")
                 .path("/")
-                .maxAge(Duration.ofHours(8))
+                .maxAge(Duration.ofHours(1)) // même temps que l'expiration du JWT token dans jwtService
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 

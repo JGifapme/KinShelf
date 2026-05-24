@@ -19,8 +19,8 @@ import java.util.List;
 @Data
 public class JwtService {
 
-    ///60 minutes de durée avant d'expiration pour le token
-    private final long jwtExpiration= 60*60*1000;
+    /// Durée d'expiration pour le token JWT
+    private final long jwtExpiration= 1*60*60*1000; // (1h) si modification, aussi modifier la durée d'expiration du cookie dans AuthController
     @Value("${jwt.secret-key}")
     private String secretKey;
     public String generateToken( String UserName, List<String> roles){

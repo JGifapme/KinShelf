@@ -27,11 +27,6 @@ public class SecurityConfiguration {
     private final UserDetailsService userDetailsService;
     private final JwtTokenFilter jwtTokenFilter;
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 //    @Bean // Pas nécessaire ? Demander à M.Ayad Mardi
 //    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
 //        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);

@@ -1,7 +1,9 @@
 package com.kinshelf.controllers;
 
 import com.kinshelf.dto.user.UserCreateDTO;
+import com.kinshelf.dto.user.UserProfileDTO;
 import com.kinshelf.dto.user.UserResponseDTO;
+import com.kinshelf.dto.user.UserUpdateDTO;
 import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.services.UserService;
 import jakarta.validation.Valid;
@@ -42,12 +44,12 @@ public class UserController {
     }
     
     @PatchMapping("/{id}")
-    //vérifier que l'id de l'utilisateur connecté = l'id qu'il veut modifier
     public ResponseEntity<UserResponseDTO> update(
             @PathVariable Long id,
-            @Valid @RequestBody UserCreateDTO dto
+            @Valid @RequestBody UserUpdateDTO dto,
+            @AuthenticationPrincipal UserDetailsImplementation userDetails
     ) {
-        return ResponseEntity.ok(userService.update(id, dto));
+        return ResponseEntity.ok(userService.update(id, dto, userDetails));
     }
     
     @DeleteMapping("/{id}")
@@ -58,7 +60,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponseDTO> getMe(@AuthenticationPrincipal UserDetailsImplementation userDetails) {
+    public ResponseEntity<UserProfileDTO> getMe(@AuthenticationPrincipal UserDetailsImplementation userDetails) {
         return ResponseEntity.ok(userService.findByUsername(userDetails.getUsername()));
     }
 

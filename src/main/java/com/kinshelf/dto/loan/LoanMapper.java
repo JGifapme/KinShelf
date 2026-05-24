@@ -8,6 +8,10 @@ public class LoanMapper {
         if (loan == null) {
             return null;
         }
+        boolean available = true;
+        if (loan.getReturnDate() == null) {
+            available = false;
+        }
 
         return new LoanResponseDTO(
                 loan.getId(),
@@ -22,6 +26,22 @@ public class LoanMapper {
                 loan.getBorrower().getUsername(),
 
                 loan.getLoanDate(),
+                loan.getReturnDate(),
+                available
+
+        );
+    }
+
+    public static LoanCreateDTO toCreateDTO(Loan loan) {
+        if (loan == null) {
+            return null;
+        }
+
+        return new LoanCreateDTO(
+                      loan.getBook().getId(),
+                loan.getOwner().getId(),
+                loan.getBorrower().getId(),
+                loan.getLoanDate(),
                 loan.getReturnDate()
         );
     }
@@ -30,11 +50,7 @@ public class LoanMapper {
         if (loan == null || dto == null) {
             return;
         }
-
-        //les deux seuls infos qui peuvent changer dans un prêt :
-        if (dto.loanDate() != null) {
-            loan.setLoanDate(dto.loanDate());
-        }
+        //la seule infos qui peut changer dans un prêt :
         if (dto.returnDate() != null) {
             loan.setReturnDate(dto.returnDate());
         }

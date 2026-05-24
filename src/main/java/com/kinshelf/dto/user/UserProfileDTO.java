@@ -9,6 +9,7 @@ public record UserProfileDTO(
         Long id,
         String username,
         String slug,
+        String email,
         LocalDate dateOfBirth,
         Integer age,
         Integer nbrOfBooks

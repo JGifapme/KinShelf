@@ -1,17 +1,16 @@
 package com.kinshelf.dto.user;
 
-import com.kinshelf.dto.book.BookTitleAndImgDTO;
-import com.kinshelf.dto.publisher.PublisherWithBooksDTO;
-import com.kinshelf.entities.Book;
-import com.kinshelf.entities.Publisher;
 import com.kinshelf.entities.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Component
+@RequiredArgsConstructor
 public class UserMapper {
+    private final PasswordEncoder passwordEncoder;
 
-    public static UserResponseDTO toDTO(User user) {
+    public UserResponseDTO toDTO(User user) {
         if (user == null) {
             return null;
         }
@@ -24,7 +23,7 @@ public class UserMapper {
         );
     }
 
-    public static User toEntity(UserCreateDTO dto) {
+    public User toEntity(UserCreateDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -38,11 +37,10 @@ public class UserMapper {
                 .build();
     }
 
-    public static void updateEntity(User user, UserCreateDTO dto) {
+    public void updateEntity(User user, UserUpdateDTO dto) {
         if (user == null || dto == null) {
             return;
         }
-
         if (dto.username() != null) {
             user.setUsername(dto.username());
         }
@@ -53,8 +51,8 @@ public class UserMapper {
         if (dto.email() != null) {
             user.setEmail(dto.email());
         }
-        if (dto.password() != null) {
-            user.setPassword(dto.password());
+        if (dto.password() != null && !dto.password().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.password()));
         }
     }
 }

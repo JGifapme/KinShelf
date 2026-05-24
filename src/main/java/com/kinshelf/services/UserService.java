@@ -1,12 +1,12 @@
 package com.kinshelf.services;
 
-import com.kinshelf.dto.user.UserCreateDTO;
-import com.kinshelf.dto.user.UserMapper;
-import com.kinshelf.dto.user.UserResponseDTO;
+import com.kinshelf.dto.user.*;
 import com.kinshelf.entities.User;
 import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.exceptions.BadRequestException;
+import com.kinshelf.exceptions.ForbiddenException;
 import com.kinshelf.exceptions.NotFoundException;
+import com.kinshelf.repositories.BookUserRepository;
 import com.kinshelf.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -26,6 +28,8 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final BookUserRepository bookUserRepository;
 
     @Transactional
     public UserResponseDTO create(UserCreateDTO dto) {
@@ -40,18 +44,18 @@ public class UserService implements UserDetailsService {
         if (userRepository.existsByEmail(dto.email())) {
             throw new BadRequestException("Cette adresse email est déjà utilisée. Vérifier que vous ne possédez pas déjà un compte.");
         }
-        User user = UserMapper.toEntity(dto);
+        User user = userMapper.toEntity(dto);
         user.setSlug(slug);
         // a hasher après avoir appris spring security
         User saved = userRepository.save(user);
 
-        return UserMapper.toDTO(saved);
+        return userMapper.toDTO(saved);
     }
     
     public List<UserResponseDTO> findAll() {
         return userRepository.findAll()
                 .stream()
-                .map(UserMapper::toDTO)
+                .map(userMapper::toDTO)
                 .toList();
     }
     
@@ -59,23 +63,25 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable pour l'id : " + id));
 
-        return UserMapper.toDTO(user);
+        return userMapper.toDTO(user);
     }
     public UserResponseDTO findBySlug(String slug) {
         User user = userRepository.findBySlug(slug)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable pour cette url."));
 
-        return UserMapper.toDTO(user);
+        return userMapper.toDTO(user);
     }
 
     @Transactional
-    public UserResponseDTO update(Long id, UserCreateDTO dto) {
+    public UserResponseDTO update(Long id, UserUpdateDTO dto, UserDetailsImplementation userDetails) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Utilisateur introuvable pour l'id : " + id));
+        if (!user.getId().equals(userDetails.getUserEntity().getId())) {
+            throw new ForbiddenException("Vous ne pouvez pas modifier ce profil.");
+        }
+        userMapper.updateEntity(user, dto);
 
-        UserMapper.updateEntity(user, dto);
-
-        return UserMapper.toDTO(userRepository.save(user));
+        return userMapper.toDTO(userRepository.save(user));
     }
     @Transactional
     public void delete(Long id) {
@@ -97,9 +103,20 @@ public class UserService implements UserDetailsService {
         return new UserDetailsImplementation(user);
     }
 
-    public UserResponseDTO findByUsername(String username) throws UsernameNotFoundException {
+    public UserProfileDTO findByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        return UserMapper.toDTO(user);
+        int age = Period.between(user.getDateOfBirth(),LocalDate.now()).getYears();
+        int nbrBooks = bookUserRepository.countByUserIdAndIsOwnTrue(user.getId());
+        UserProfileDTO upd = new UserProfileDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getSlug(),
+                user.getEmail(),
+                user.getDateOfBirth(),
+                age,
+                nbrBooks
+        );
+        return upd;
     }
 
     public boolean existsByUsername(String username) {

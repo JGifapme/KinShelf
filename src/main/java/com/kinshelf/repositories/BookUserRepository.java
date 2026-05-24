@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface BookUserRepository extends JpaRepository<BookUser, BookUserId> {
     List<BookUser> findByUserId(Long userId);
     Optional<BookUser> findByBookIdAndUserId(Long bookId, Long userId);
+    Integer countByUserIdAndIsOwnTrue(Long userId);
 }

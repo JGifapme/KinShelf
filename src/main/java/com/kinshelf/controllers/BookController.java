@@ -1,12 +1,10 @@
 package com.kinshelf.controllers;
 
-import com.kinshelf.dto.author.AuthorWithBooksDTO;
 import com.kinshelf.dto.book.BookCreateDTO;
 import com.kinshelf.dto.book.BookResponseDTO;
 import com.kinshelf.dto.book.BookTitleAndImgDTO;
 import com.kinshelf.dto.book.BookWithUsersInputDTO;
 import com.kinshelf.dto.bookUser.BookUserCreateDTO;
-import com.kinshelf.dto.bookUser.BookUserResponseDTO;
 import com.kinshelf.entities.BookUserId;
 import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.services.BookService;
@@ -83,7 +81,6 @@ public class BookController {
         //vérifier que ça supprime bien les tables intermédiaires : bookAuthor, bookUser, Loan, bookGenres
     }
 
-
     /// Gestion des relations Book <-> User.
     /// Update ou créer l'entrée : 1 seul endpoint pour les 2
     @PatchMapping("/{bookId}/status") //permet de mettre si on a lu un livre, le possède, sa note, ...,
@@ -96,6 +93,5 @@ public class BookController {
 
         return ResponseEntity.ok(bookService.findById(bookId));
     }
-
 
 }
