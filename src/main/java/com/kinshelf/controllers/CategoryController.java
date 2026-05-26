@@ -35,7 +35,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.findById(id));
     }
     @GetMapping("/{slug}")
-    public ResponseEntity<CategoryWithBooksDTO> getBySlug(@PathVariable String slug) {
+    public ResponseEntity<CategoryResponseDTO> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(categoryService.findBySlug(slug));
     }
 

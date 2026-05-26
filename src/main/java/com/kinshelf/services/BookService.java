@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,7 +54,15 @@ public class BookService {
     public Page<BookTitleAndImgDTO> findAll(Pageable pageable) {
         return bookRepository.findAllByOrderByTitleAsc(pageable).map(bookMapper::toDTOTitleAndImg);
     }
-    public Page<BookTitleAndImgDTO> findAll(String search, String genreSlug, String userSlug, String categorySlug, String publisherSlug, Pageable pageable) {
+    public Page<BookTitleAndImgDTO> findAll(String search, String genreSlug, String userSlug, String categorySlug, String publisherSlug, String userStatus, int page, int size, String sortBy, Long userId) {
+        Sort sort = switch (sortBy) {
+            case "a-z" -> Sort.by("title").ascending();
+            case "z-a" -> Sort.by("title").descending();
+            case "oldest" -> Sort.by("id").ascending();
+            case "newest" -> Sort.by("id").descending();
+            default -> Sort.by("title").ascending(); // a-z
+        };
+        Pageable pageable = PageRequest.of(page, size, sort);
         // On vérifie que les paramètre ne soit pas vide "" ce qui pourrait provoquer des erreurs, on préfère renvoyer null
         String searchN = search;
         if (search == null || search.trim().isEmpty()) {
@@ -66,13 +76,11 @@ public class BookService {
         if (Objects.equals(userSlug, "all-users")) {
             userSlug = null;
             allUsers = "1";
-
         }
         String userSlugN = userSlug;
         if (userSlug == null || userSlug.trim().isEmpty()) {
             userSlugN = null;
         }
-
         String categorySlugN = categorySlug;
         if (categorySlug == null || categorySlug.trim().isEmpty()) {
             categorySlugN = null;
@@ -81,7 +89,20 @@ public class BookService {
         if (publisherSlug == null || publisherSlug.trim().isEmpty()) {
             publisherSlugN = null;
         }
-        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN, categorySlugN, allUsers, publisherSlugN, pageable)
+        Boolean userIsRead = null;
+        Boolean userIsInterested = null;
+        if (userStatus != null) {
+            if(userStatus.equalsIgnoreCase("readtrue")){
+                userIsRead = true;
+            }
+            else if(userStatus.equalsIgnoreCase("readfalse")){
+                userIsRead = false;
+            }
+            else if(userStatus.equalsIgnoreCase("interested")){
+                userIsInterested = true;
+            }
+        }
+        return bookRepository.findBookSearch(searchN, genreSlugN, userSlugN, categorySlugN, allUsers, publisherSlugN, userId, userIsRead, userIsInterested ,pageable)
                 .map(bookMapper::toDTOTitleAndImg);
     }
 

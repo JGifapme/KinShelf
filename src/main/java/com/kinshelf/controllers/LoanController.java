@@ -4,6 +4,7 @@ import com.kinshelf.dto.loan.LoanCreateDTO;
 import com.kinshelf.dto.loan.LoanResponseDTO;
 import com.kinshelf.dto.loan.LoanStatusDTO;
 import com.kinshelf.entities.UserDetailsImplementation;
+import com.kinshelf.filters.LoanFilter;
 import com.kinshelf.services.LoanService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,6 @@ public class LoanController {
 
     private final LoanService loanService;
 
-    //Controller pour Pret ou dans BookController ? Voir tout les prets de tout le groupe est utile ...
-    // mais les autres méthodes plutot dans les tables dédiée soit BookController soit UserController
-
     /// Gestion des prêts (loans).
     @PostMapping("/{bookId}/to/{borrowerId}")
     public ResponseEntity<LoanResponseDTO> createLoan(
@@ -36,12 +34,16 @@ public class LoanController {
 
         return ResponseEntity.ok(loanService.create(userDetails.getUserEntity().getId(), borrowerId, bookId));
     }
-    
+
+    /// renvoie les prêts de l'utilisateur avec un filtre : prété, emprunté et historique en fonction de ce qu'on veut voir
     @GetMapping
-    public ResponseEntity<List<LoanResponseDTO>> getAll() {
-        return ResponseEntity.ok(loanService.findAll());
+    public ResponseEntity<List<LoanResponseDTO>> getMyLoans(
+            @RequestParam LoanFilter filter,
+            @AuthenticationPrincipal UserDetailsImplementation userDetails) {
+        return ResponseEntity.ok(loanService.getMyLoans(filter, userDetails.getUserEntity().getId()));
     }
 
+    ///  renvoie si le livre est possédé par l'utilisateur, si il est prêté ou non et si oui à qui
     @GetMapping("/{bookId}/status")
     public ResponseEntity<LoanStatusDTO> getLoanStatusForBook(
             @PathVariable Long bookId,
@@ -49,23 +51,12 @@ public class LoanController {
 
         return ResponseEntity.ok(loanService.getLoanStatusForBook(bookId, userDetails.getUserEntity().getId()));
     }
-    
+    /// permet juste de mettre la date de retour d'un prêt à la date d'aujourd'hui
     @PatchMapping("/{id}")
     public ResponseEntity<LoanResponseDTO> update(
             @PathVariable Long id,
             @AuthenticationPrincipal UserDetailsImplementation userDetails
     ) {
         return ResponseEntity.ok(loanService.update(id, userDetails));
-    }
-    
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        loanService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/borrower/{userId}")
-    public ResponseEntity<List<LoanResponseDTO>> getByBorrower(@PathVariable Long userId) {
-        return ResponseEntity.ok(loanService.findByBorrower(userId));
     }
 }

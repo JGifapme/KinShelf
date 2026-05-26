@@ -25,8 +25,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     LEFT JOIN b.genres g
     LEFT JOIN b.category c
     LEFT JOIN b.publisher p
-    LEFT JOIN b.bookUsers bu 
-    LEFT JOIN bu.user u 
+    LEFT JOIN b.bookUsers buUser WITH (buUser.user.id = :userId)
+    LEFT JOIN b.bookUsers buAll
     WHERE (:search IS NULL 
         OR LOWER(b.title) LIKE LOWER(CONCAT('%', :search, '%')) 
         OR LOWER(s.name) LIKE LOWER(CONCAT('%', :search, '%'))
@@ -34,9 +34,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
         AND (:genreSlug IS NULL OR g.slug = :genreSlug)
         AND (:categorySlug IS NULL OR c.slug = :categorySlug)
         AND (:publisherSlug IS NULL OR p.slug = :publisherSlug)
-        AND (:userSlug IS NULL OR (bu.isOwn = true AND u.slug = :userSlug))
-        AND (:allUsers IS NULL OR bu.isOwn = true)
-    ORDER BY b.title ASC
+        AND (:userSlug IS NULL OR buUser.isOwn = true)
+        AND (:allUsers IS NULL OR buAll.isOwn = true)
+        AND (:userIsRead IS NULL OR (
+            :userIsRead = true AND buUser.isRead = true
+            OR :userIsRead = false AND (buUser.isRead = false OR buUser.isRead IS NULL)
+        ))
+        AND (:userIsInterested IS NULL OR buUser.isInterested = true)
 """)
     Page<Book> findBookSearch(
             @Param("search") String search,
@@ -45,5 +49,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             @Param("categorySlug") String categorySlug,
             @Param("allUsers") String allUsers,
             @Param("publisherSlug") String publisherSlug,
+            @Param("userId") Long userId,
+            @Param("userIsRead") Boolean userIsRead,
+            @Param("userIsInterested") Boolean userIsInterested,
             Pageable pageable);
 }

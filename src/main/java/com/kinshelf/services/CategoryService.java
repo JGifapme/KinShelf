@@ -46,11 +46,11 @@ public class CategoryService {
 
         return CategoryMapper.toDTOCatWithBooks(category);
     }
-    public CategoryWithBooksDTO findBySlug(String slug) {
+    public CategoryResponseDTO findBySlug(String slug) {
         Category category = categoryRepository.findBySlug(slug)
                 .orElseThrow(() -> new NotFoundException("Catégorie introuvable pour cette url."));
 
-        return CategoryMapper.toDTOCatWithBooks(category);
+        return CategoryMapper.toDTO(category);
     }
 
     @Transactional

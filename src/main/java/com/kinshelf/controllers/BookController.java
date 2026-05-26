@@ -45,12 +45,14 @@ public class BookController {
             @RequestParam(required = false) String userSlug,
             @RequestParam(required = false) String categorySlug,
             @RequestParam(required = false) String publisherSlug,
+            @RequestParam(required = false) String userStatus,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "50") int size
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(defaultValue = "a-z") String sortBy,
+            @AuthenticationPrincipal UserDetailsImplementation userDetails
             ) {
-        Pageable pageable = PageRequest.of(page, size);
-        //Ajouter la possibilité de mettre des filtres : lu, possédé, en fonction de la note, de l'auteur, du titre,
-            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug, categorySlug, publisherSlug, pageable));
+        Long userId = userDetails.getUserEntity().getId();
+            return ResponseEntity.ok(bookService.findAll(search, genreSlug, userSlug, categorySlug, publisherSlug, userStatus, page, size, sortBy, userId));
     }
 
     //n'importe quel user identifié
@@ -64,7 +66,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.findBySlug(slug));
     }
 
-    //juste les admins
+    //juste les admins ?
     @PatchMapping("/{id}")
     public ResponseEntity<BookResponseDTO> update(
             @PathVariable Long id,

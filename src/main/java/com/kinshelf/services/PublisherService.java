@@ -45,10 +45,10 @@ public class PublisherService {
                 .orElseThrow(() -> new NotFoundException("Éditeur non trouvé pour l'id : " + id));
         return PublisherMapper.toDTOPublisherWithBooks(publisher);
     }
-    public PublisherWithBooksDTO findBySlug(String slug) {
+    public PublisherResponseDTO findBySlug(String slug) {
         Publisher publisher = publisherRepository.findBySlug(slug)
                 .orElseThrow(() -> new NotFoundException("Éditeur non trouvé pour cette url."));
-        return PublisherMapper.toDTOPublisherWithBooks(publisher);
+        return PublisherMapper.toDTO(publisher);
     }
 
     @Transactional

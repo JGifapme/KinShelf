@@ -55,9 +55,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         // 3. Valider le token et authentifier l'utilisateur
         try {
-            String username = jwtService.extractUsername(token);
+            Long userId = jwtService.extractUserId(token);
             // 4. Charger les détails de l'utilisateur depuis la base de données
-            UserDetails userDetails = userService.loadUserByUsername(username);
+            UserDetails userDetails = userService.loadUserById(userId);
             // 5. Vérifier si le token est bien valide pour cet utilisateur
             if (jwtService.isTokenValid(token, userDetails)) {
                 // 6. Créer un objet d'authentification et le stocker dans le contexte de sécurité

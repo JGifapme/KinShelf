@@ -36,7 +36,7 @@ public class PublisherController {
     }
 
     @GetMapping("/{slug}")
-    public ResponseEntity<PublisherWithBooksDTO> getBySlug(@PathVariable String slug) {
+    public ResponseEntity<PublisherResponseDTO> getBySlug(@PathVariable String slug) {
         return ResponseEntity.ok(publisherService.findBySlug(slug));
     }
 

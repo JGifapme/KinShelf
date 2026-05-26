@@ -15,7 +15,8 @@ public record UserUpdateDTO(
         @NotNull(message = "La date de naissance est obligatoire")
         LocalDate dateOfBirth,
 
-        @Email @NotBlank(message = "L'email est obligatoire")
+        @Email
+        @NotBlank(message = "L'email est obligatoire")
         String email,
 
         @Size(min = 6, message = "Le mot de passe doit faire minimum 6 caractères.")

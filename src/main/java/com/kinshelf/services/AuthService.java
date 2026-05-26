@@ -1,6 +1,7 @@
 package com.kinshelf.services;
 
 import com.kinshelf.dto.user.*;
+import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.exceptions.BadRequestException;
 import com.kinshelf.exceptions.ForbiddenException;
 import com.kinshelf.exceptions.UnauthorizedException;
@@ -33,13 +34,14 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(
                             request.username(), request.password())
             );
-            String username = authentication.getName();
+            UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
+            String userId = String.valueOf(userDetails.getUserEntity().getId());
             List<String> roles = authentication.getAuthorities()
                     .stream()
                     .map(GrantedAuthority::getAuthority)
                     .filter(role -> role.startsWith("ROLE_"))
                     .toList();
-            String jwtToken = jwtService.generateToken(username, roles);
+            String jwtToken = jwtService.generateToken(userId, roles);
 
             return new AuthResult(
                     "Utilisateur authentifié.",
@@ -47,7 +49,7 @@ public class AuthService {
                     jwtToken
             );
         } catch (BadCredentialsException e) {
-            throw new UnauthorizedException("Vous n'êtes pas autorisé à accéder à ce contenu.");
+            throw new UnauthorizedException("LOGIN/PASSWORD INCORRECT.");
         } catch (DisabledException e) {
             throw new ForbiddenException("Compte désactivé.");
         }
@@ -70,9 +72,10 @@ public class AuthService {
                     passwordEncoder.encode(request.password()),
                     List.of("USER")
             );
-            userService.create(user);
+            UserResponseDTO urd = userService.create(user);
+            String userId = String.valueOf(urd.id());
             // on crée le jwt token
-            String jwtToken = jwtService.generateToken(request.username(), List.of("ROLE_USER"));
+            String jwtToken = jwtService.generateToken(userId, List.of("ROLE_USER"));
 
             // on retourne juste le token pour que le controller pose le cookie
             return new AuthResult(

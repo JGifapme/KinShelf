@@ -18,17 +18,17 @@ public class LoanMapper {
 
                 loan.getBook().getId(),
                 loan.getBook().getTitle(),
+                loan.getBook().getSlug(),
 
                 loan.getOwner().getId(),
                 loan.getOwner().getUsername(),
 
                 loan.getBorrower().getId(),
                 loan.getBorrower().getUsername(),
+                loan.getBorrower().getSlug(),
 
                 loan.getLoanDate(),
-                loan.getReturnDate(),
-                available
-
+                loan.getReturnDate()
         );
     }
 

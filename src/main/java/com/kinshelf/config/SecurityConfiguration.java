@@ -1,6 +1,7 @@
 package com.kinshelf.config;
 
 import com.kinshelf.filters.JwtTokenFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,6 +47,15 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         // ont dit à Spring de ne jamais créer de session HTTP côté serveur
+                )
+                // Force Spring security a renvoyer une 401 au lieu d'une 403
+                // lorsque l'utilisateur n'est pas authentifié pour gérer la redirection dans le front
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"message\":\"Non authentifié.\"}");
+                        })
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/logout").permitAll()

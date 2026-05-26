@@ -1,5 +1,6 @@
 package com.kinshelf.services;
 
+import com.kinshelf.entities.UserDetailsImplementation;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -23,10 +24,10 @@ public class JwtService {
     private final long jwtExpiration= 1*60*60*1000; // (1h) si modification, aussi modifier la durée d'expiration du cookie dans AuthController
     @Value("${jwt.secret-key}")
     private String secretKey;
-    public String generateToken( String UserName, List<String> roles){
+    public String generateToken( String userId, List<String> roles){
 
         return Jwts.builder()
-                .setSubject(UserName)
+                .setSubject(userId)
                 .claim("roles", roles)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+ jwtExpiration))
@@ -56,8 +57,12 @@ public class JwtService {
                 .getBody()
                 .getSubject();
     }
+    public Long extractUserId(String token) {
+        return Long.parseLong(extractUsername(token));
+    }
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = this.extractUsername(token);
-        return username != null && username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        final Long userId = this.extractUserId(token);
+        final Long userEntityId = ((UserDetailsImplementation) userDetails).getUserEntity().getId();
+        return userId != null && userId.equals(userEntityId) && !isTokenExpired(token);
     }
 }

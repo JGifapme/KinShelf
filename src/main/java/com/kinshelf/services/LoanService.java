@@ -1,5 +1,6 @@
 package com.kinshelf.services;
 
+import com.kinshelf.controllers.LoanController;
 import com.kinshelf.dto.loan.*;
 import com.kinshelf.entities.Book;
 import com.kinshelf.entities.Loan;
@@ -7,6 +8,7 @@ import com.kinshelf.entities.User;
 import com.kinshelf.entities.UserDetailsImplementation;
 import com.kinshelf.exceptions.BadRequestException;
 import com.kinshelf.exceptions.NotFoundException;
+import com.kinshelf.filters.LoanFilter;
 import com.kinshelf.repositories.BookRepository;
 import com.kinshelf.repositories.LoanRepository;
 import com.kinshelf.repositories.UserRepository;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -119,5 +122,21 @@ public class LoanService {
                 loanId,
                 borrowerName
         );
+    }
+
+    public @Nullable List<LoanResponseDTO> getMyLoans(LoanFilter filter, Long id) {
+        List<Loan> loans = new ArrayList<>();
+        if (filter == null) {
+            loans = loanRepository.findByOwnerId(id);
+        } else if (filter == LoanFilter.LENT) {
+            loans = loanRepository.findByOwnerIdAndReturnDateNull(id);
+        } else if (filter == LoanFilter.BORROWED) {
+            loans = loanRepository.findByBorrowerIdAndReturnDateNull(id);
+        } else if (filter == LoanFilter.HISTORY) {
+            loans = loanRepository.findByOwnerIdAndReturnDateNotNull(id);
+        }
+        return loans.stream()
+                .map(LoanMapper::toDTO)
+                .toList();
     }
 }
