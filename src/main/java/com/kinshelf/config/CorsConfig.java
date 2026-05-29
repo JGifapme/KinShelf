@@ -18,7 +18,9 @@ public class CorsConfig {
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",   // pour Vue.js
-                "http://localhost"         // pour Docker
+                "http://localhost",         // pour Docker
+                "http://localhost:8080",
+                "http://localhost:80"
                 ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
