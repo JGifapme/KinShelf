@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/// Controleur qui sert à récupérer les infos à partir d'un numéro isbn soit sur l'api d'OpenLibrary soit sur Google books
+/// pour pré-remplir l'ajout d'un livre
 @RestController
 @RequestMapping("/api/isbn")
 @RequiredArgsConstructor
@@ -19,8 +21,8 @@ public class IsbnController {
 
     private final DataFromOtherApiService dataApiService;
 
-    //controlleur qui sert à récupérer les infos à partir d'un numéro isbn soit sur l'api d'OpenLibrary soit sur Google books
-    //Pour pré remplir l'ajout d'un livre
+    /// Endpoint qui sert à récupérer les infos à partir d'un numéro isbn soit sur l'api d'OpenLibrary soit sur Google books
+    /// pour pré-remplir l'ajout d'un livre.
     @GetMapping("/{isbn}")
     public ResponseEntity<BookFromApiDTO> getBookInfo(@PathVariable String isbn) {
         BookFromApiDTO book = dataApiService.bookByIsbn(isbn);

@@ -1,6 +1,6 @@
 # 📚 KinShelf
 
-KinShelf est une API REST développée avec Spring Boot permettant de gérer une bibliothèque de livres et les interactions des utilisateurs autour de celle-ci.
+KinShelf est une API REST développée avec Spring Boot permettant de gérer une bibliothèque de livres et les interactions des utilisateurs autour de celle-ci. L'application est faites de sortes à ce qu'un petit groupe d'utilisateurs puissent partager leurs bibliothèques et leur passion pour la lecture.
 
 L’application permet de :
 
@@ -35,7 +35,6 @@ L’objectif est de proposer une base solide, évolutive et maintenable pour une
 | Front-end | Vue.js 3, TypeScript, Pinia, Axios |
 | Base de données | MySQL 8 |
 
-
 ## Prérequis
 
 - Java 21
@@ -57,6 +56,8 @@ Se connecter à MySQL et créer la base :
 
 ```sql
 CREATE DATABASE kinshelf CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+Utiliser le fichier kinshelf.sql pour créer les tables
 ```
 
 ### 3. Configurer les variables d'environnement

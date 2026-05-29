@@ -19,18 +19,22 @@ import java.util.List;
 @Service
 @Data
 public class JwtService {
-
+    @Value("${cookie.jwt.time-in-hour}")
+    private long cookieJwtTimeInHour; //on récupère en h la durée d'expiration mise dans les propriétés
     /// Durée d'expiration pour le token JWT
-    private final long jwtExpiration= 1*60*60*1000; // (1h) si modification, aussi modifier la durée d'expiration du cookie dans AuthController
     @Value("${jwt.secret-key}")
     private String secretKey;
+    // durée d'expiration pour le jwt, je passe par une méthode plutot qu'une variable car sinon le @Value n'est
+    // pas encore pris en compte au momene ou la variable s'initialise
+    public long getJwtExpiration() {
+        return cookieJwtTimeInHour * 60 * 60 * 1000;
+    }
     public String generateToken( String userId, List<String> roles){
-
         return Jwts.builder()
                 .setSubject(userId)
                 .claim("roles", roles)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ jwtExpiration))
+                .setExpiration(new Date(System.currentTimeMillis()+ getJwtExpiration()))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

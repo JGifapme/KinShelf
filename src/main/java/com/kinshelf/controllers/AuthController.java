@@ -4,6 +4,7 @@ import com.kinshelf.dto.user.*;
 import com.kinshelf.services.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 
+/// Controleur qui gère les seuls routes publiques qui sont /api/auth/login, /register et /logout
+/// Permet de s'identifier, créer un compte et se déconnecter
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -22,18 +25,22 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /// Le nombre d'heures de validité pour le jwt/le cookie (mis dans properties)
+    @Value("${cookie.jwt.time-in-hour}")
+    private long cookieJwtTimeInHour;
+
+    /// Endpoints qui permet de s'identifier, génère aussi le cookie HttpOnly avec le jwt et l'id de l'utilisateur
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request,
                                               HttpServletResponse response) {
         AuthResult result = authService.login(request);
-
         // pose le cookie
         ResponseCookie cookie = ResponseCookie.from("jwt", result.jwtToken())
                 .httpOnly(true)
                 .secure(false) // mettre true en production, le site doit être en https pour que ça fonctionne
                 .sameSite("Strict")
                 .path("/")
-                .maxAge(Duration.ofHours(1)) // même temps que l'expiration du JWT token dans jwtService
+                .maxAge(Duration.ofHours(cookieJwtTimeInHour)) // même temps que l'expiration du JWT token dans jwtService
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
@@ -44,6 +51,7 @@ public class AuthController {
         ));
     }
 
+    /// Endpoint qui permet de créer un compte, génère aussi le cookie HttpOnly avec le jwt et l'id de l'utilisateur
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody RegisterRequest request,
                                       HttpServletResponse response) {
@@ -55,7 +63,7 @@ public class AuthController {
                 .secure(false) // mettre true en production, le site doit être en https pour que ça fonctionne
                 .sameSite("Strict")
                 .path("/")
-                .maxAge(Duration.ofHours(1)) // même temps que l'expiration du JWT token dans jwtService
+                .maxAge(Duration.ofHours(cookieJwtTimeInHour)) // même temps que l'expiration du JWT token dans jwtService
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
@@ -66,6 +74,7 @@ public class AuthController {
         ));
     }
 
+    /// Endpoint qui permet de se déconnecter et mettre à 0 le temps de validité du cookie avec le jwt token
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         // supprime le contenu du cookie jwt

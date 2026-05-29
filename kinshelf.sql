@@ -31,10 +31,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 /*-------------------------------------------------AUTHORS*/
 CREATE TABLE IF NOT EXISTS `authors` (
   `id_author` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `name` VARCHAR(150) NOT NULL,
+  `name` VARCHAR(150) NOT NULL UNIQUE,
   `slug` VARCHAR(150) NOT NULL UNIQUE,
   `is_deleted` BOOLEAN NOT NULL DEFAULT FALSE
-  UNIQUE(fname, lname)
 ) ENGINE=InnoDB;
 /*--------------------------------------------------GENRES*/
 CREATE TABLE IF NOT EXISTS `genres` (
@@ -60,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `publishers` (
 /*---------------------------------------------------SERIES*/
 CREATE TABLE IF NOT EXISTS `series` (
   `id_series` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `name` VARCHAR(150) NOT NULL,
+  `name` VARCHAR(150) NOT NULL INDEX,
   `slug` VARCHAR(150) NOT NULL UNIQUE,
   `status` ENUM('EN_COURS','FINIE','ARRET'),
   `is_deleted` BOOLEAN NOT NULL DEFAULT FALSE
@@ -71,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `series` (
 CREATE TABLE IF NOT EXISTS `books` (
   `id_book` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `isbn` VARCHAR(25) UNIQUE,
-  `title` VARCHAR(255) NOT NULL,
+  `title` VARCHAR(255) NOT NULL INDEX,
   `slug` VARCHAR(255) NOT NULL UNIQUE,
   `description` TEXT,
   `nb_pages` INT UNSIGNED,
@@ -118,6 +117,7 @@ CREATE TABLE IF NOT EXISTS `books_users` (
   `is_interested` BOOLEAN,
   `rating` TINYINT UNSIGNED,
   `comment` TEXT,
+  `date_comment` DATE,
   `book_id` INT UNSIGNED NOT NULL,
   `user_id` INT UNSIGNED NOT NULL,
   UNIQUE (`book_id`, `user_id`),

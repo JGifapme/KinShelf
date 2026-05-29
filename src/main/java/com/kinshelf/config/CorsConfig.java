@@ -7,7 +7,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
-/// défini quelles origines peuvent accèder à mon API
+/// Classe de configuration qui défini quelles origines peuvent accèder à mon API
 /// et quelles méthodes sont authorisées (POST, PATCH, ...).
 @Configuration
 public class CorsConfig {
@@ -15,10 +15,13 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // port en localhost pour Vue.js
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",   // pour Vue.js
+                "http://localhost"         // pour Docker
+                ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true); // pour les cookies httpOnly
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

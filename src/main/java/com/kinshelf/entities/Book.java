@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
 @Builder
 public class Book {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_book")

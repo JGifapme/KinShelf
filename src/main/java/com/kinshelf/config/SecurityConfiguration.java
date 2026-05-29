@@ -28,17 +28,13 @@ public class SecurityConfiguration {
     private final UserDetailsService userDetailsService;
     private final JwtTokenFilter jwtTokenFilter;
 
-//    @Bean // Pas nécessaire ? Demander à M.Ayad Mardi
-//    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
-//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-//        provider.setPasswordEncoder(passwordEncoder);
-//        return provider;
-//    }
+    /// Gestionnaire d'authentification de Spring Security
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
+    /// Configure les règles de sécurité et les filtres HTTP de l'application
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -59,7 +55,7 @@ public class SecurityConfiguration {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/logout").permitAll()
-                        //.requestMatchers("/api/v1/protected/**").authenticated() -> j'utilise plutot les @PreAuthorize
+                        //.requestMatchers("/api/v1/protected/**").authenticated() -> j'utilise plutot les @PreAuthorize dans mes controllers
                         .anyRequest().permitAll()
                 );
         //.httpBasic(Customizer.withDefaults()); -> on ne passe pas par là, mais par mon front vue.js

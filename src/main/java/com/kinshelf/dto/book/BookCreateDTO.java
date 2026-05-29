@@ -6,7 +6,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
-
+/// DTO qui donne les infos nécessaires pour créer un livre
+/// Les messages après les validations permettent de lancer une MethodArgumentNotValidException contenant le message
 public record BookCreateDTO(
 
         @NotBlank(message = "Le titre est obligatoire")
@@ -16,12 +17,12 @@ public record BookCreateDTO(
         @Size(max = 13, message = "L'isbn ne peut dépasser 13 caractères.")
         String isbn,
 
-        String description,
+        String description, // Description ou synopsis du livre
 
         @Positive(message = "Le nombre de page doit être supérieur à 0.")
         Integer numberOfPages,
 
-        String coverUrl,
+        String coverUrl, // URL de l'image de couverture pour l'afficher dans le front
 
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate publicationDate,
@@ -33,8 +34,8 @@ public record BookCreateDTO(
         Long seriesId,
 
         @NotEmpty(message = "Le livre doit avoir au moins 1 auteur.")
-        List<BookAuthorCreateDTO> authors,
+        List<BookAuthorCreateDTO> authors, // Liste du/des auteurs du livre
 
-        List<Long> genreIds
+        List<Long> genreIds // Liste des id des genres du livre
 
 ) {}
