@@ -13,6 +13,7 @@ import java.util.List;
 public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        System.out.println(">>> CORS bean chargé");
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(

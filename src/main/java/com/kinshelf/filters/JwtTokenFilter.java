@@ -35,6 +35,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        // Test pour docker  : laisse passer les requêtes OPTIONS sans vérifier le JWT
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         // 1. Récupérer le cookie "jwt"
         String token = null;
         if (request.getCookies() != null) {
