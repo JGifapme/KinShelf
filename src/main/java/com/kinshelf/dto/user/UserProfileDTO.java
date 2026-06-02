@@ -4,7 +4,7 @@ import com.kinshelf.dto.book.BookTitleAndImgDTO;
 
 import java.time.LocalDate;
 import java.util.List;
-
+/// DTO qui retourne toutes les infos de l'utilisateur connecté pour sa page profil
 public record UserProfileDTO(
         Long id,
         String username,

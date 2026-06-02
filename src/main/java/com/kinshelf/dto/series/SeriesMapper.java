@@ -8,9 +8,10 @@ import com.kinshelf.entities.Series;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/// Classe utilitaire pour convertir les objets Series en DTO et inversément
 public class SeriesMapper {
 
+    /// Convertit un objet Series en DTO SeriesResponseDTO
     public static SeriesResponseDTO toDTO(Series series) {
         if (series == null) {
             return null;
@@ -24,6 +25,7 @@ public class SeriesMapper {
         );
     }
 
+    /// Convertit un DTO SeriesCreateDTO en objet Series
     public static Series toEntity(SeriesCreateDTO dto) {
         if (dto == null){
             return null;
@@ -34,7 +36,7 @@ public class SeriesMapper {
                 .status(dto.status())
                 .build();
     }
-
+    /// Met à jour un objet Series avec les données du DTO
     public static void updateEntity(Series series, SeriesCreateDTO dto) {
         if (series == null || dto == null) {
             return;
@@ -47,7 +49,7 @@ public class SeriesMapper {
             series.setStatus(dto.status());
         }
     }
-
+    /// Convertit un objet Series en DTO avec sa liste de livres associés
     public static SeriesWithBooksDTO toDTOSeriesWithBooks(Series series) {
         if (series == null) {
             return null;
@@ -60,6 +62,7 @@ public class SeriesMapper {
                 bookList
         );
     }
+    /// Récupère la liste des livres associés a la série en DTO simplifié juste le titre, le slug et l'image
     private static List<BookTitleAndImgDTO> mapBooks(Series series) {
         List<BookTitleAndImgDTO> bookTitles = new ArrayList<>();
 

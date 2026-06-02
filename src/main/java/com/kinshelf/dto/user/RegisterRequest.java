@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-
+///  DTO utilisé lors de l'inscription d'un utilisateur, demande le username,
+/// la date de naissance, l'email et le mot de passe
 public record RegisterRequest(
         @NotBlank(message = "Le username est obligatoire")
         @Size(max = 150, message = "Le username ne peut dépasser 150 caractères.")

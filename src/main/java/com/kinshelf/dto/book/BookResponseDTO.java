@@ -13,6 +13,7 @@ import com.kinshelf.entities.Series;
 import java.time.LocalDate;
 import java.util.List;
 
+/// DTO de réponse pour un livre avec toutes les informations sur celui-çi
 public record BookResponseDTO(
 
         Long id,

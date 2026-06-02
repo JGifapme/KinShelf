@@ -6,10 +6,10 @@ import com.kinshelf.entities.BookUser;
 import com.kinshelf.entities.Category;
 import com.kinshelf.entities.User;
 import org.springframework.stereotype.Component;
-
+/// Classe utilitaire pour convertir les objets BookUser (les intéractions entre les utilisateurs et les livres) en DTO et inversément
 @Component
 public class BookUserMapper {
-
+/// Convertit un objet BookUser en DTO BookUserResponseDTO
     public static BookUserResponseDTO toDTO(BookUser bu) {
         if (bu == null) {
             return null;
@@ -27,6 +27,7 @@ public class BookUserMapper {
                 bu.getComment()
         );
     }
+    /// Convertit un objet BookUser en DTO BUWithUserNameDTO
     public static BUWithUserNameDTO toDTOWithUserName(BookUser bu) {
         if (bu == null) {
             return null;
@@ -43,6 +44,7 @@ public class BookUserMapper {
                 bu.getComment()
         );
     }
+    /// Convertit un DTO BookUserResponseDTO en objet BookUser
     public BookUser toEntity(BookUserCreateDTO dto, Book book, User user) {
         if (dto == null) {
             return null;
@@ -58,7 +60,7 @@ public class BookUserMapper {
                 .comment(dto.comment())
                 .build();
     }
-
+    /// Méthode qui met à jour l'objet BookUser depuis le DTO BookUserCreateDTO
     public static void updateEntity(BookUser bu, BookUserCreateDTO dto) {
         if (bu == null || dto == null) {
             return;

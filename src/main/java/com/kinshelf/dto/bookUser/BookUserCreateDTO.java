@@ -1,7 +1,7 @@
 package com.kinshelf.dto.bookUser;
 
 import jakarta.validation.constraints.*;
-
+///  DTO de création pour la table de liaison entre les utilisateurs et les livres
 public record BookUserCreateDTO(
         Boolean isOwn,
         Boolean isRead,

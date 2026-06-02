@@ -13,14 +13,10 @@ import java.util.List;
 public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        System.out.println(">>> CORS bean chargé");
         CorsConfiguration configuration = new CorsConfiguration();
-
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",   // pour Vue.js
-                "http://localhost",         // pour Docker
-                "http://localhost:8080",
-                "http://localhost:80"
+                "http://localhost"         // pour Docker
                 ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));

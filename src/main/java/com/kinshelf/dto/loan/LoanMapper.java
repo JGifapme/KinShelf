@@ -1,9 +1,9 @@
 package com.kinshelf.dto.loan;
 
 import com.kinshelf.entities.Loan;
-
+/// Classe utilitaire pour convertir les objets Loan en DTO et inversément
 public class LoanMapper {
-
+    /// Convertit un objet Loan en DTO LoanResponseDTO
     public static LoanResponseDTO toDTO(Loan loan) {
         if (loan == null) {
             return null;
@@ -31,21 +31,6 @@ public class LoanMapper {
                 loan.getReturnDate()
         );
     }
-
-    public static LoanCreateDTO toCreateDTO(Loan loan) {
-        if (loan == null) {
-            return null;
-        }
-
-        return new LoanCreateDTO(
-                      loan.getBook().getId(),
-                loan.getOwner().getId(),
-                loan.getBorrower().getId(),
-                loan.getLoanDate(),
-                loan.getReturnDate()
-        );
-    }
-
     public static void updateEntity(Loan loan, LoanCreateDTO dto) {
         if (loan == null || dto == null) {
             return;

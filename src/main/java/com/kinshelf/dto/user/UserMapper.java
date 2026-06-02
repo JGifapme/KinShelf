@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+/// Classe utilitaire pour convertir les objets User en DTO et inversément
 public class UserMapper {
     private final PasswordEncoder passwordEncoder;
 
+    /// Convertit un objet User en DTO UserResponseDTO
     public UserResponseDTO toDTO(User user) {
         if (user == null) {
             return null;
@@ -22,7 +24,7 @@ public class UserMapper {
                 user.getDateOfBirth()
         );
     }
-
+    /// Convertit un DTO UserCreateDTO en objet User
     public User toEntity(UserCreateDTO dto) {
         if (dto == null) {
             return null;
@@ -36,7 +38,7 @@ public class UserMapper {
                 .userRoles(dto.userRoles())
                 .build();
     }
-
+    /// Met à jour un objet User avec les données du DTO
     public void updateEntity(User user, UserUpdateDTO dto) {
         if (user == null || dto == null) {
             return;

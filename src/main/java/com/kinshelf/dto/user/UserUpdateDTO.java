@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-
+/// DTO pour mettre à jour les infos de l'utilisateur connecté via sa page profil
+/// Le mot de passe n'est pas obligatoire, l'ancien est gardé si vide
 public record UserUpdateDTO(
         @NotBlank(message = "Le username est obligatoire")
         @Size(max = 150)

@@ -1,7 +1,7 @@
 package com.kinshelf.dto.loan;
 
 import java.time.LocalDate;
-
+/// Dto qui retourne toutes les infos liée à un prêt : titre du livre, nom du prêteur et de l'emprunteur, ...
 public record LoanResponseDTO(
         Long id,
         Long bookId,

@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+/// Classe utilitaire pour convertir les objets Book en DTO et inversément
 public class BookMapper {
 
     private final PublisherRepository publisherRepository;
@@ -32,6 +33,7 @@ public class BookMapper {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
 
+    /// Convertit un objet Book en DTO BookResponseDTO
     public BookResponseDTO toDTO(Book book) {
         if (book == null) {
             return null;
@@ -57,6 +59,7 @@ public class BookMapper {
         );
     }
 
+    /// Convertit un objet Book en DTO allégé avec seulement le titre, le slug, l'id et l'image de couverture
     public BookTitleAndImgDTO toDTOTitleAndImg(Book book) {
         if (book == null) {
             return null;
@@ -69,7 +72,7 @@ public class BookMapper {
         );
     }
 
-
+    /// Convertit un objet Book en DTO avec les infos du livre et les interactions des utilisateurs avec ce livre
     public BookWithUsersInputDTO toDTOWithUsersInput(Book book) {
         if (book == null) {
             return null;
@@ -96,6 +99,7 @@ public class BookMapper {
         );
     }
 
+    /// Méthode qui renvoie le dto léger de l'éditeur de l'objet Book associé
     private PublisherResponseDTO mapPublisher(Book book) {
         if (book.getPublisher() != null) {
             return PublisherMapper.toDTO(book.getPublisher());
@@ -103,6 +107,7 @@ public class BookMapper {
         return null;
     }
 
+    /// Méthode qui renvoie le dto léger de la catégorie de l'objet Book associé
     private CategoryResponseDTO mapCategory(Book book) {
         if (book.getCategory() != null) {
             return CategoryMapper.toDTO(book.getCategory());
@@ -110,6 +115,7 @@ public class BookMapper {
         return null;
     }
 
+    /// Méthode qui renvoie le dto léger de la série de l'objet Book associé
     private SeriesResponseDTO mapSeries(Book book) {
         if (book.getSeries() != null) {
             return SeriesMapper.toDTO(book.getSeries());
@@ -117,6 +123,7 @@ public class BookMapper {
         return null;
     }
 
+    /// Méthode qui renvoie le dto léger des auteurs associés a l'objet Book
     private List<AuthorResponseWithRoleDTO> mapAuthors(Book book) {
         if (book.getBookAuthors() == null) {
             return List.of();
@@ -138,7 +145,7 @@ public class BookMapper {
                 })
                 .collect(Collectors.toList());
     }
-
+    /// Méthode qui renvoie le dto léger des genres associés a l'objet Book
     private List<GenreResponseDTO> mapGenres(Book book) {
         if (book.getGenres() == null) {
             return List.of();
@@ -149,6 +156,7 @@ public class BookMapper {
                 .map(genre -> new GenreResponseDTO(genre.getId(), genre.getName(), genre.getSlug()))
                 .collect(Collectors.toList());
     }
+    /// Méthode qui renvoie le dto léger des interactions utilisateurs associés a l'objet Book
     private List<BUWithUserNameDTO> mapBookUser(Book book) {
         if (book.getBookUsers() == null) {
             return List.of();
@@ -169,6 +177,7 @@ public class BookMapper {
                 .collect(Collectors.toList());
     }
 
+    /// Méthode qui met à jour l'objet Book depuis le DTO BookCreateDTO
     public void updateEntityFromDTO(Book book, BookCreateDTO dto) {
         if (dto.title() != null && !dto.title().isEmpty()) {
             book.setTitle(dto.title());
@@ -222,6 +231,8 @@ public class BookMapper {
             book.getGenres().clear();
         }
     }
+    /// Méthode qui update les auteurs d'une entité book en se basant sur les id d'auteur fourni dans le BookCreateDTO
+    /// Supprime les auteurs qui ne sont plus associés.
     private void updateAuthors(Book book, BookCreateDTO dto) {
         if (dto.authors() == null) {
             book.getBookAuthors().clear();

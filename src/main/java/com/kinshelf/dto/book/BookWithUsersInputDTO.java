@@ -10,7 +10,7 @@ import com.kinshelf.dto.series.SeriesResponseDTO;
 
 import java.time.LocalDate;
 import java.util.List;
-
+///  DTO complet pour la page détails d'un livre avec toutes ses infos + les interactions des utilisateurs
 public record BookWithUsersInputDTO (
         Long id,
         String title,

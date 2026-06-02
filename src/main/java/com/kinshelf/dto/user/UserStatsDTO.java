@@ -1,7 +1,7 @@
 package com.kinshelf.dto.user;
 
 import java.util.Map;
-
+/// DTO qui retourne les statistiques de lecture de l'utilisateur connecté pour sa page profil/stat
 public record UserStatsDTO(
         int totalOwned,
         int totalRead,

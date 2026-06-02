@@ -6,9 +6,10 @@ import com.kinshelf.entities.Genre;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/// Classe utilitaire pour convertir les objets Genre en DTO et inversément
 public class GenreMapper {
 
+    /// Convertit un objet Genre en DTO GenreResponseDTO
     public static GenreResponseDTO toDTO(Genre genre) {
         if (genre == null) {
             return null;
@@ -21,6 +22,7 @@ public class GenreMapper {
         );
     }
 
+    /// Convertit un DTO GenreCreateDTO en objet Genre
     public static Genre toEntity(GenreCreateDTO dto) {
         if (dto == null) {
             return null;
@@ -30,7 +32,7 @@ public class GenreMapper {
                 .name(dto.name())
                 .build();
     }
-
+    /// Met à jour un objet Genre avec les données du DTO
     public static void updateEntity(Genre genre, GenreCreateDTO dto) {
         if (genre == null || dto == null) {
             return;
@@ -39,7 +41,7 @@ public class GenreMapper {
             genre.setName(dto.name());
         }
     }
-
+    /// Convertit un Genre en DTO avec la liste des livres qui ont ce genre
     public static GenreWithBooksDTO toDTOGenreWithBooks(Genre genre) {
         if (genre == null) {
             return null;
@@ -51,6 +53,7 @@ public class GenreMapper {
                 bookList
         );
     }
+    /// Récupère la liste des livres associés au genre en DTO simplifié juste le titre, le slug et l'image
     private static List<BookTitleAndImgDTO> mapBooks(Genre genre) {
         List<BookTitleAndImgDTO> bookTitles = new ArrayList<>();
 

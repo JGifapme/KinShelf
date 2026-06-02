@@ -9,9 +9,10 @@ import com.kinshelf.entities.Category;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/// Classe utilitaire pour convertir les objets Category en DTO et inversément
 public class CategoryMapper {
 
+    /// Convertit un objet Category en DTO CategoryResponseDTO
     public static CategoryResponseDTO toDTO(Category category) {
         if (category == null) {
             return null;
@@ -23,7 +24,7 @@ public class CategoryMapper {
                 category.getSlug()
         );
     }
-
+    /// Convertit un DTO CategoryCreateDTO en objet Category
     public static Category toEntity(CategoryCreateDTO dto) {
         if (dto == null) {
             return null;
@@ -33,7 +34,7 @@ public class CategoryMapper {
                 .name(dto.name())
                 .build();
     }
-
+    /// Met à jour un objet Category avec les données du DTO
     public static void updateEntity(Category category, CategoryCreateDTO dto) {
         if (category == null || dto == null) {
             return;
@@ -42,7 +43,7 @@ public class CategoryMapper {
             category.setName(dto.name());
         }
     }
-
+    /// Convertit une Category en DTO avec sa liste de livres
     public static CategoryWithBooksDTO toDTOCatWithBooks(Category category) {
         if (category == null) {
             return null;
@@ -54,6 +55,7 @@ public class CategoryMapper {
                 bookList
         );
     }
+    /// Récupère la liste des livres de la category en DTO simplifié juste le titre, le slug et l'image
     private static List<BookTitleAndImgDTO> mapBooks(Category category) {
         List<BookTitleAndImgDTO> bookTitles = new ArrayList<>();
 

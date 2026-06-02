@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
+/// Gestionnaire global des exceptions.
+/// Intercepte les exceptions levées dans l'application et les convertit en réponses HTTP standardisées.
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)

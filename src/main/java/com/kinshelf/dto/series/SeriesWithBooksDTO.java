@@ -4,7 +4,7 @@ import com.kinshelf.dto.book.BookTitleAndImgDTO;
 import com.kinshelf.entities.SeriesStatus;
 
 import java.util.List;
-
+/// DTO qui retourne l'id, le nom et la liste des livres d'une série
 public record SeriesWithBooksDTO(
         Long id,
         String name,

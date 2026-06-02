@@ -24,8 +24,9 @@ L’objectif est de proposer une base solide, évolutive et maintenable pour une
 
 | Partie | Repository |
 |---|---|
-| 🖥️ Back-end | [kinshelf-back] https://github.com/JGifapme/KinShelf |
-| 🎨 Front-end | [kinshelf-front] https://github.com/JGifapme/KinShelf-Front |
+| Docker | [kinshelf-back](https://github.com/JGifapme/KinShelf-Docker) |
+| 🖥️ Back-end | [kinshelf-back](https://github.com/JGifapme/KinShelf) |
+| 🎨 Front-end | [kinshelf-front](https://github.com/JGifapme/KinShelf-Front) |
 
 ## Stack technique
 

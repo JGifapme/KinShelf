@@ -55,7 +55,7 @@ public class SecurityConfiguration {
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        //.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/logout").permitAll()
                         //.requestMatchers("/api/v1/protected/**").authenticated() -> j'utilise plutot les @PreAuthorize dans mes controllers
                         .anyRequest().permitAll()

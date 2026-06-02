@@ -3,7 +3,8 @@ package com.kinshelf.dto.user;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
-
+/// DTO utilisé lors de la création d'un utilisateur, après avoir récupéré les infos de l'utilisateur via
+/// le registerRequest DTO, on lui ajoute ses roles (Spring security) avant de le sauvegarder en base de données
 public record UserCreateDTO(
 
         @NotBlank(message = "Le username est obligatoire")
