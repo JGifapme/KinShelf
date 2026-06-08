@@ -17,6 +17,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+/// Classe qui reprend la logique autour de l'entitée Category.
+/// Fait le pont entre les controleurs et le CategoryRepository.
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;

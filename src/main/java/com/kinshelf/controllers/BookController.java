@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
-@PreAuthorize("isAuthenticated()")// seul les utilisateurs authentifié/connecté peuvent utiliser cet endpoints
+@PreAuthorize("isAuthenticated()")// seul les utilisateurs authentifié/connecté peuvent utiliser ces endpoints
 public class BookController {
 
     private final BookService bookService;

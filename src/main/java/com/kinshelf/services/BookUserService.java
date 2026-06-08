@@ -20,34 +20,21 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+/// Service chargé de gérer les relations entre les utilisateurs et les livres.
 public class BookUserService {
 
     private final BookUserRepository bookUserRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-    private final BookUserMapper bookUserMapper;
 
-//    @Transactional // finalement le create est aussi de la patch, abandonné celui-ci ?
-//    public BookUserResponseDTO create(BookUserCreateDTO dto) {
-//        //Vérifier que l'association est unique : dans le repo faire un findByBookIdAndUserId puis vérifier
-//        Book book = bookRepository.findById(dto.bookId())
-//                .orElseThrow(() -> new NotFoundException("Livre introuvable"));
-//
-//        User user = userRepository.findById(dto.userId())
-//                .orElseThrow(() -> new NotFoundException("Utilisateur introuvable"));
-//
-//        BookUser bookUser = bookUserMapper.toEntity(dto, book, user);
-//
-//        return BookUserMapper.toDTO(bookUserRepository.save(bookUser));
+
+//    public List<BookUserResponseDTO> findAll() {
+//        return bookUserRepository.findAll()
+//                .stream()
+//                .map(BookUserMapper::toDTO)
+//                .toList();
 //    }
-
-    public List<BookUserResponseDTO> findAll() {
-        return bookUserRepository.findAll()
-                .stream()
-                .map(BookUserMapper::toDTO)
-                .toList();
-    }
-
+//
     public BookUserResponseDTO findById(BookUserId id) {
         BookUser bu = bookUserRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id));
@@ -55,16 +42,16 @@ public class BookUserService {
         return BookUserMapper.toDTO(bu);
     }
 
-    @Transactional
-    public BookUserResponseDTO update(BookUserId id, BookUserCreateDTO dto) {
-
-        BookUser bu = bookUserRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id));
-
-        BookUserMapper.updateEntity(bu, dto);
-
-        return BookUserMapper.toDTO(bookUserRepository.save(bu));
-    }
+//    @Transactional
+//    public BookUserResponseDTO update(BookUserId id, BookUserCreateDTO dto) {
+//
+//        BookUser bu = bookUserRepository.findById(id)
+//                .orElseThrow(() -> new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id));
+//
+//        BookUserMapper.updateEntity(bu, dto);
+//
+//        return BookUserMapper.toDTO(bookUserRepository.save(bu));
+//    }
 
     @Transactional
     public BookUserResponseDTO upCreate(BookUserId id, BookUserCreateDTO dto) {
@@ -95,30 +82,10 @@ public class BookUserService {
         BookUserMapper.updateEntity(bu, dto);
         return BookUserMapper.toDTO(bookUserRepository.save(bu));
     }
-
-    @Transactional
-    public void delete(BookUserId id) {
-        if (!bookUserRepository.existsById(id)) {
-            throw new NotFoundException("relation livre/utilisateur introuvable pour l'id : " + id);
-        }
-        bookUserRepository.deleteById(id);
-    }
-
-    public List<BookUserResponseDTO> findByUser(Long userId) {
-        return bookUserRepository.findByUserId(userId)
-                .stream()
-                .map(BookUserMapper::toDTO)
-                .toList();
-    }
-
-    // Lecture : tout le monde peut voir qui possède quoi
-    //sur un livre on peut voir qui le possède
-    public List<UserResponseDTO> getOwnersListByBook(Long bookId) {
-        return null;
-    }
-
-    // sur un utilisateur quels livres il a
-    public List<BookResponseDTO> getBooksListByOwner(Long UserId) {
-        return null;
-    }
+//    public List<BookUserResponseDTO> findByUser(Long userId) {
+//        return bookUserRepository.findByUserId(userId)
+//                .stream()
+//                .map(BookUserMapper::toDTO)
+//                .toList();
+//    }
 }

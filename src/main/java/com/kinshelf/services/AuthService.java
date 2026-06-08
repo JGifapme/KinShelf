@@ -22,12 +22,20 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+///  Classe qui possède la logique derrière l'authentification : login et register
 public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
-
+    /**
+     * Authentifie un utilisateur à partir de son identifiant et de son mot de passe.
+     * @param request contient le nom d'utilisateur et le mot de passe.
+     * @return un objet {@link AuthResult} contenant le message de succès,
+     *         les rôles de l'utilisateur et le token JWT généré.
+     * @throws UnauthorizedException si les identifiants sont incorrects.
+     * @throws ForbiddenException si le compte utilisateur est désactivé.
+     */
     public AuthResult login(LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -49,12 +57,23 @@ public class AuthService {
                     jwtToken
             );
         } catch (BadCredentialsException e) {
-            throw new UnauthorizedException("LOGIN/PASSWORD INCORRECT.");
+            throw new UnauthorizedException("Identifiants invalides.");
         } catch (DisabledException e) {
             throw new ForbiddenException("Compte désactivé.");
         }
     }
-
+    /**
+     * Crée un nouveau compte utilisateur puis génère un token JWT
+     * permettant son authentification immédiate.
+     * @param request contient les informations nécessaires à l'inscription
+     *                (nom d'utilisateur, email, mot de passe, date de naissance).
+     * @return un objet {@link AuthResult} contenant le message de succès,
+     *         les rôles de l'utilisateur et le token JWT généré.
+     * @throws BadRequestException si le nom d'utilisateur, l'email ou
+     *                             une autre donnée fournie est invalide.
+     * @throws ResponseStatusException si une erreur technique survient
+     *                                 lors de la création du compte.
+     */
     public AuthResult register(RegisterRequest request) {
         try {
             // on vérifie si le nom et l'email ne sont pas déjà pris
