@@ -16,8 +16,8 @@ public record RegisterRequest(
         @NotNull(message = "La date de naissance est obligatoire")
         LocalDate dateOfBirth,
 
-        @Email(message = "L'email n'est pas valide.")
         @NotBlank(message = "L'email est obligatoire")
+        @Email(message = "L'email n'est pas valide.")
         String email,
 
         @NotBlank(message = "Le mot de passe est obligatoire")
