@@ -34,7 +34,7 @@ public class SeriesService {
     }
     
     public List<SeriesResponseDTO> findAll() {
-        return seriesRepository.findAll()
+        return seriesRepository.findAllByOrderByNameAsc()
                 .stream()
                 .map(SeriesMapper::toDTO)
                 .toList();

@@ -26,6 +26,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     LEFT JOIN b.category c
     LEFT JOIN b.publisher p
     LEFT JOIN b.bookUsers buUser WITH (buUser.user.id = :userId)
+    LEFT JOIN b.bookUsers buOwner WITH (buOwner.user.slug = :userSlug)
     LEFT JOIN b.bookUsers buAll
     WHERE (:search IS NULL 
         OR LOWER(b.title) LIKE LOWER(CONCAT('%', :search, '%')) 
@@ -34,7 +35,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
         AND (:genreSlug IS NULL OR g.slug = :genreSlug)
         AND (:categorySlug IS NULL OR c.slug = :categorySlug)
         AND (:publisherSlug IS NULL OR p.slug = :publisherSlug)
-        AND (:userSlug IS NULL OR buUser.isOwn = true)
+        AND (:userSlug IS NULL OR buOwner.isOwn = true)
         AND (:allUsers IS NULL OR buAll.isOwn = true)
         AND (:userIsRead IS NULL OR (
             :userIsRead = true AND buUser.isRead = true
@@ -53,4 +54,29 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             @Param("userIsRead") Boolean userIsRead,
             @Param("userIsInterested") Boolean userIsInterested,
             Pageable pageable);
+
+    @Query("""
+    SELECT DISTINCT b FROM Book b 
+    LEFT JOIN b.bookAuthors ba 
+    LEFT JOIN b.bookUsers buFrom WITH (buFrom.user.slug = :userSlug)
+    LEFT JOIN b.bookUsers buYou WITH (buYou.user.id = :userId)
+    WHERE (buFrom.isOwn = true)
+        AND (buYou.isInterested = true)
+""")
+    List<Book> findWishBooksFromUserLibrary(
+            @Param("userSlug") String userSlug,
+            @Param("userId") Long userId);
+
+    @Query("""
+    SELECT DISTINCT b FROM Book b 
+    LEFT JOIN b.bookAuthors ba 
+    LEFT JOIN b.bookUsers buFrom WITH (buFrom.user.id = :userId)
+    LEFT JOIN b.bookUsers buWishBy WITH (buWishBy.user.slug = :userSlug)
+    WHERE (buFrom.isOwn = true)
+        AND (buWishBy.isInterested = true)
+""")
+    List<Book> findWishedBooksFromUserFromMyLibrary(
+            @Param("userSlug") String userSlug,
+            @Param("userId") Long userId);
+
 }

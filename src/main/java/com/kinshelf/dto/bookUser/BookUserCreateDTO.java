@@ -8,7 +8,7 @@ public record BookUserCreateDTO(
         Boolean isInterested,
 
         @Min(value = 0, message = "La note doit être comprise entre 0 et 5.")
-        @Max(5)
+        @Max(value = 5, message = "La note doit être comprise entre 0 et 5.")
         Integer rating,
         String comment
 

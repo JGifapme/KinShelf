@@ -25,6 +25,7 @@ public class LoanController {
 
     private final LoanService loanService;
 
+
     /// Création d'un prêt de l'utilisateur connecté (owner) vers un autre utilisateur (borrower) par son id d'un livre par son id
     @PostMapping("/{bookId}/to/{borrowerId}")
     public ResponseEntity<LoanResponseDTO> createLoan(

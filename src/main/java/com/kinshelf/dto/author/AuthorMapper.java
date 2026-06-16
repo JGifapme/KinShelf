@@ -8,6 +8,7 @@ import com.kinshelf.entities.Book;
 import com.kinshelf.entities.BookAuthor;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 /// Classe utilitaire pour convertir les objets Author
@@ -72,6 +73,7 @@ public class AuthorMapper {
             );
             bookTitles.add(dto);
         }
+        bookTitles.sort(Comparator.comparing(BookTitleAndImgDTO::title));
         return bookTitles;
     }
 }

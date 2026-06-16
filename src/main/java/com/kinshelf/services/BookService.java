@@ -151,6 +151,19 @@ public class BookService {
         return bookMapper.toDTOWithUsersInput(book);
     }
 
+    public List<BookTitleAndImgDTO> findWishBooksFromUserLibrary(String ownerSlug, Long userId) {
+        return bookRepository.findWishBooksFromUserLibrary(ownerSlug, userId)
+                .stream()
+                .map(bookMapper::toDTOTitleAndImg)
+                .toList();
+    }
+    public List<BookTitleAndImgDTO> WishedBooksFromUserFromMyLibrary(String userSlug, Long userId) {
+        return bookRepository.findWishedBooksFromUserFromMyLibrary(userSlug, userId)
+                .stream()
+                .map(bookMapper::toDTOTitleAndImg)
+                .toList();
+    }
+
     /**
      * Recherche un livre par son slug.
      * @throws NotFoundException si le livre n'existe pas.

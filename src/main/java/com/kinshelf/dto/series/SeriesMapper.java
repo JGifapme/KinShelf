@@ -7,6 +7,7 @@ import com.kinshelf.entities.Series;
 import com.kinshelf.entities.Series;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 /// Classe utilitaire pour convertir les objets Series en DTO et inversément
 public class SeriesMapper {
@@ -69,7 +70,9 @@ public class SeriesMapper {
         if (series.getBooks() == null) {
             return bookTitles;
         }
-        for (Book book : series.getBooks()) {
+        for (Book book : series.getBooks().stream()
+                .sorted(Comparator.comparing(Book::getTitle, String.CASE_INSENSITIVE_ORDER))
+                .toList()) {
             BookTitleAndImgDTO dto = new BookTitleAndImgDTO(
                     book.getId(),
                     book.getTitle(),
@@ -78,6 +81,7 @@ public class SeriesMapper {
             );
             bookTitles.add(dto);
         }
+
         return bookTitles;
     }
 }

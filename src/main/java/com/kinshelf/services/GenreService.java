@@ -34,7 +34,7 @@ public class GenreService {
     }
     
     public List<GenreResponseDTO> findAll() {
-        return genreRepository.findAll()
+        return genreRepository.findAllByOrderByNameAsc()
                 .stream()
                 .map(GenreMapper::toDTO)
                 .toList();

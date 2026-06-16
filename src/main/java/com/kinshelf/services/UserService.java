@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
     }
     
     public List<UserResponseDTO> findAll() {
-        return userRepository.findAll()
+        return userRepository.findAllByOrderByUsernameAsc()
                 .stream()
                 .map(userMapper::toDTO)
                 .toList();

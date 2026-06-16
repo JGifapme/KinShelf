@@ -34,7 +34,7 @@ public class PublisherService {
     }
 
     public List<PublisherResponseDTO> findAll() {
-        return publisherRepository.findAll()
+        return publisherRepository.findAllByOrderByNameAsc()
                 .stream()
                 .map(PublisherMapper::toDTO)
                 .toList();

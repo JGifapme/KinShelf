@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `books_users` (
   `is_own` BOOLEAN,
   `is_read` BOOLEAN,
   `is_interested` BOOLEAN,
-  `rating` TINYINT UNSIGNED,
+  `rating` INT CHECK (rating BETWEEN 0 AND 5),
   `comment` TEXT,
   `date_comment` DATE,
   `book_id` INT UNSIGNED NOT NULL,

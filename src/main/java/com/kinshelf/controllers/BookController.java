@@ -73,6 +73,20 @@ public class BookController {
         return ResponseEntity.ok(bookService.findBySlug(slug));
     }
 
+    @GetMapping("/wish/{fromSlug}")
+    public ResponseEntity<List<BookTitleAndImgDTO>> getMyWishBooksFromUserLibrary(
+            @PathVariable String fromSlug,
+            @AuthenticationPrincipal UserDetailsImplementation userDetail) {
+        return ResponseEntity.ok(bookService.findWishBooksFromUserLibrary(fromSlug, userDetail.getUserEntity().getId()));
+    }
+
+    @GetMapping("/wished/{userSlug}")
+    public ResponseEntity<List<BookTitleAndImgDTO>> getWishedBooksFromUserFromMyLibrary(
+            @PathVariable String userSlug,
+            @AuthenticationPrincipal UserDetailsImplementation userDetail) {
+        return ResponseEntity.ok(bookService.WishedBooksFromUserFromMyLibrary(userSlug, userDetail.getUserEntity().getId()));
+    }
+
     /// Endpoint qui permet de mettre à jour les informations d'un livre
     //juste les admins ?
     @PatchMapping("/{id}")

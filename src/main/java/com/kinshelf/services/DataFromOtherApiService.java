@@ -3,6 +3,7 @@ package com.kinshelf.services;
 import com.kinshelf.dto.book.BookFromApiDTO;
 import com.kinshelf.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,6 +21,9 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class DataFromOtherApiService {
     private final BookService bookService;
+
+    @Value("${google.api.key}")
+    private String googleApiKey;
     
     //RestTemplate sert à transformer la réponse JSON de l'API en une Map
     private final RestTemplate restTemplate = new RestTemplate();
@@ -156,7 +160,7 @@ public class DataFromOtherApiService {
     }
 
     private BookFromApiDTO recupDeGoogleBooks(String isbn) {
-        String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
+        String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn+"&key="+googleApiKey;
         try {
             //on récupère les données du json de l'api Open Library dans un Map
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
@@ -173,7 +177,11 @@ public class DataFromOtherApiService {
             String imageUrl = null;
             if (volumeInfo.containsKey("imageLinks")) {
                 Map<String, String> imageLinks = (Map<String, String>) volumeInfo.get("imageLinks");
-                imageUrl = imageLinks.get("small");
+                if (imageLinks.containsKey("thumbnail")) {
+                    imageUrl = imageLinks.get("thumbnail");
+                } else if (imageLinks.containsKey("smallThumbnail")) {
+                    imageUrl = imageLinks.get("smallThumbnail");
+                }
             }
 
             //la date

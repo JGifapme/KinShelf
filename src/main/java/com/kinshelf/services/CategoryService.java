@@ -36,7 +36,7 @@ public class CategoryService {
     }
 
     public List<CategoryResponseDTO> findAll() {
-        return categoryRepository.findAll()
+        return categoryRepository.findAllByOrderByNameAsc()
                 .stream()
                 .map(CategoryMapper::toDTO)
                 .toList();

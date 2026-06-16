@@ -46,7 +46,7 @@ L’objectif est de proposer une base solide, évolutive et maintenable pour une
 ### 1. Cloner le repository
 
 ```bash
-git clone <url-back>
+git clone https://github.com/JGifapme/KinShelf
 cd kinshelf-back
 ```
 

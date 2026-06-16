@@ -46,7 +46,7 @@ public class AuthorService {
     }
     /// Retourne la liste de tous les auteurs
     public List<AuthorResponseDTO> findAll() {
-        return authorRepository.findAll()
+        return authorRepository.findAllByOrderByNameAsc()
                 .stream()
                 .map(AuthorMapper::toDTO)
                 .toList();
